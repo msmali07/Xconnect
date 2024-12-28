@@ -1,0 +1,283 @@
+﻿<div class="modal fade" id="filterdiv" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content modal-md" style="min-width: 400px;">
+
+            <div class="modal-header padd-10 mrg-btm10">
+                <h4 class="nomargin">
+                    Filter
+                </h4>
+            </div>
+            <div class="mrg-top05" ng-show="IsShowNumberFilter"> 
+                <span id="btnnumberfilter" ng-click="NumberFilterClick('Number');" class="btn-numberfilter"  style="cursor:pointer;" ng-style="NumFilterActive === true ? { 'background-color':'red'} : { 'background-color': '#868686' }" ><b>Number Filter</b>  </span>
+                @*ng-style="NumFilterActive === true ? { 'background-color':'red'} : { 'background-color': '#868686' }"*@
+               
+            </div>
+            <div class="filter modal-body" style="min-height: 325px;">
+               
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                    <div class="col-md-12 col-xs-12 mrg-top0 mltslct">
+                        <h5 class="bold">Select Options:</h5>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top0 dropdown keep-open">
+
+                            <select id="ddlFilter" name="multiselect[]" multiple="multiple" ></select>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnYes" ng-click="ApplyFilter()" class="btn hover-btn"> Apply </button>
+                <button id="btnLogOut" data-dismiss="modal" class="btn hover-btn"> Cancel </button>
+                <button id="btnclear" ng-click="ClearFilterSelectedvalue()" class="btn hover-btn"> Clear </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Numberfilterdiv" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content modal-md" style="min-width: 400px;">
+            <div class="modal-header padd-10 mrg-btm10">
+                <h4 class="nomargin">
+                    Number Filter
+                </h4>
+            </div>
+           
+            <div class="filter modal-body" style="min-height: 325px;">
+                @*style="overflow-y: unset;"style="overflow-y: unset;"*@
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12  mrg-btm10 mrg-top20">
+                        <label>
+                            Select Number Filter Options:
+                        </label>
+                        <select class="select--hoshi" id="ddl_Range">
+
+                        </select>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 mrg-top0 " id="Rabgelistdiv" style="display:none;">
+                        <label>Choose your browser from the list:</label>
+                        <input list="numberrange" name="numberrange" id="numberrangetext" class="select--hoshi">
+                        <datalist id="numberrange" class="select--hoshi"></datalist>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnYes" ng-click="NumberApplyFilter()" class="btn hover-btn"> Apply </button>
+                <button id="btnclose" data-dismiss="modal" class="btn hover-btn"> Cancel </button>
+                @*<button id="btnclearnumber" ng-click="ClearNumberFiltervalue()" class="btn hover-btn"> Clear </button>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="MailDiv" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content modal-lg" style="">
+
+            <div class="modal-header padd-10">
+                <h4 class="nomargin">
+                   Report Mail
+                </h4>
+            </div>
+            <div class="filter modal-body mrg-btm25" >
+                
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top20">
+                            <input class="floating-inpt" type="text" required id="txtmailfrom"  maxlength="100" />
+                            <span class="floating-label" for="Address"> Mail From <span class="red-color">*</span> </span>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top20">
+
+                            <input class="floating-inpt" type="text" required id="txtmailto" maxlength="100" />
+                            <span class="floating-label" for="Address"> Mail To <span class="red-color">*</span> </span>
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top20">
+
+                            <input class="floating-inpt" type="text" required id="txtmailcc" maxlength="100" />
+                            <span class="floating-label" for="Address"> Cc  </span>
+
+                        </div>
+
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top20">
+
+                            <input class="floating-inpt" type="text" required id="txtmailsubject"  maxlength="500" />
+                            <span class="floating-label" for="Address"> Mail Subject <span class="red-color">*</span> </span>
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+                        <span class="browse-txt" style="font-size: 12px;font-style:italic;padding-left:10px">(Please use "," for sending the email with multiple emailid's in To and Cc.)</span>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12">
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-top20">
+
+                            <span top="0px !important" for="Address"> Attachment &nbsp;&nbsp; <img src="../images/attch.gif" alt=""></span>
+                            <a style="font-style: italic;text-decoration: underline !important;
+                            color: #337ab7;" href="#" data-toggle="tooltip" id="_Attachment"></a>
+
+                        </div>
+
+                    </div>
+               
+                
+            </div>
+            <div class="modal-footer mrg-top10">
+                <button id="btnYes" ng-click="MailReport()" class="btn hover-btn"> Send </button>
+                <button id="btnLogOut" data-dismiss="modal" class="btn hover-btn"> Cancel </button>
+               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="hidecoldiv" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content modal-md" style="min-width: 400px;">
+
+            <div class="modal-header padd-10">
+                <h4 class="nomargin">
+                    Hide
+                </h4>
+            </div>
+            <div class="filter modal-body" style="min-height: 325px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                    <div class="col-md-12 col-xs-12 mrg-top0 mltslct">
+                        <h5 class="bold">Select column:</h5>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top0 dropdown keep-open">
+
+                            <select id="ddlHide" name="multiselect[]" multiple="multiple"></select>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnYes" ng-click="HideColumns();" class="btn hover-btn"> Apply </button>
+                <button id="btnLogOut" data-dismiss="modal" class="btn hover-btn"> Cancel </button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Sortcoldiv" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content modal-md" style="min-width: 400px;">
+
+            <div class="modal-header padd-10">
+                <h4 class="nomargin">
+                    Sort
+                </h4>
+            </div>
+            <div class="filter modal-body" style="min-height: 325px;overflow-x:hidden;width:99%;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+                    <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #fff;">Column</th>
+                                <th style="background-color: #fff;"></th>
+                                <th style="background-color: #fff;">Order</th>
+                                <th style="background-color: #fff;"></th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="s in SortDetails">
+                                <td>
+                                    <span ng-show="$first">Sort by</span><span ng-show="!$first">Then by</span>
+                                </td>
+                                <td>
+
+                                    <select class="select--hoshi mrg-btm0 " id="sortcolunm_{{s.SrNo}}"  >
+                                        <option ng-selected="s.Column == '0'" value="0">Select column</option>
+                                        <option value="{{l}}" ng-repeat="l in SortColList">
+                                            {{l.split('~')[2]}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+
+                                    <select class="select--hoshi mrg-btm0" id="sortorder_{{s.SrNo}}"  >
+                                        <option value="asc">Ascending </option>
+                                        <option value="desc">Descending </option>
+
+                                    </select>
+                                </td>
+                                <td>
+                                    <i class="fa fa-plus-square mrg-top40" aria-hidden="true" style="font-size: 17px;" ng-show="$last" ng-click="addMoreLevel(s.SrNo);"> </i>
+                                    <i class="fa fa-minus-square mrg-top40" aria-hidden="true" style="font-size: 17px;" ng-show="(SortDetails.length > 1)" ng-click="deleteLevel(s.SrNo);"> </i>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mrg-top05" ng-show="TopDivShow == true">
+                       
+                            <span class="floating-label-select" > Show :  </span>
+                           <select class="select--hoshi"  id="ddltopdatawithsort">
+                              
+                                <option value="0">All</option>
+                                
+                                <option value="10">10</option>
+                              
+                                <option value="15">15</option>
+                               
+                                <option value="25">25</option>
+                               
+                                <option value="50">50</option>
+                               
+                            </select>
+                        
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnYes" ng-click="ApplySorting();" class="btn hover-btn"> Apply </button>
+                <button id="btnYes" ng-click="ClearSorting();" class="btn hover-btn"> Clear </button>
+                <button id="btnLogOut" data-dismiss="modal" class="btn hover-btn"> Cancel </button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.dropdown.keep-open').on({
+        "shown.bs.dropdown": function () { this.closable = false; },
+        "click": function () { this.closable = true; },
+        "hide.bs.dropdown": function () { return this.closable; }
+    });
+</script>
+
+
+

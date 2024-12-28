@@ -1,0 +1,312 @@
+﻿
+@using Report.BLL;
+@using Report.DO;
+@using Report.Web;
+@using ReportViewerForMvc
+
+
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ProductionReport</title>
+
+
+
+    <script src="~/libs/DataTables/jquery.dataTables.js"></script>
+  
+    
+    <script src="~/Scripts/ProductionReport.js?v15"></script>
+    <script src="~/Scripts/AllCities.js"></script>
+    <script src="~/libs/angucomplete-alt.js"></script>
+    <link href="~/Css/angucomplete-alt.css" rel="stylesheet" />
+    <link href="~/Css/angular-material-v1.1.3.css" rel="stylesheet" />
+    <style type="text/css">
+       
+        td.details-control {
+    background: url(../images/details_open.png) no-repeat center center;
+    cursor: pointer;
+}
+
+    </style>
+
+</head>
+
+<body ng-app="Prodreportapp" ng-controller="ProdreportCntr" id="MainWrap">
+
+    <input type="hidden" id="hdnParentmemberid" value="" />
+    <input type="hidden" id="hdnParenttypeid" value="" />
+    <input type="hidden" id="hdnsearchtype" value="@TempData["SearchType"]" />
+    <input type="hidden" id="hdnFilterKey" value="@ViewBag.FilterKey" />
+    <input type="hidden" id="hdnRptParam" value="@ViewBag.RptSearch" />
+
+    <div id="MainBody" runat="server" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+        <div id="HeaderSearchdiv" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 container mrg-top40">
+            <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12 mtb10 hdbg bdr1 bdr-btm0" id="divhdeading">
+
+                <h3>Production Report</h3>
+                <span ng-hide="ModifySearch" class="pull-right mrg-top05" id="modifyserach">
+                    <a id="btnModifySearch" class="btn search hover-btn" data-toggle="collapse" data-target="#demo"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> &nbsp;Modify seach </a>
+                </span>
+            </div>
+
+            <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg2 collapse  bdr1 bdr-top0" id="demo" style="box-shadow:none !important;">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-btm10 nopadding">
+                    <ul class="nav nav-tabs nobdr mrg-top05">
+                        <li id="Arrivalwise" class="radio-inline nomargin padd-lft10">
+                            <label class="radio-inline"><input type="radio" id="ADW" autocomplete="o ff" name="Booking" text="Arrivaldate wise" value="1" class="mrg-lft0" ng-click="test('A')" checked="checked">Service Date Wise</label>
+                        </li>
+                        <li id="BookDatewise" class="radio-inline nomargin">
+                            <label class="radio-inline"><input type="radio" id="BDW" autocomplete="off" name="Booking" text="Bookdate wise" value="0" class="mrg-lft0" ng-click="test('B')">Booking Date Wise</label>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-btm10 nopadding">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <select class="select--hoshi" id="ddl_CustomDateRange" (input)="ReportFilter.CustomDateOption=$event.target.value">
+                            <option value="">Custom Date Range</option>
+
+
+                            <option ng-selected="ReportFilter.CustomDateOption == dd.Values" value="{{dd.Values}}" ng-repeat="dd in DateRangeList">
+                                {{dd.Name}}
+                            </option>
+                        </select>
+
+
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="ProdReport.From" id="txtArrivalFromDate">
+                        <span class="floating-label" id="spArrivalFromDate">Service-From <span class="red-color">*</span></span>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="ProdReport.To" id="txtArrivalToDate">
+                        <span class="floating-label" id="spArrivalToDate">Service-To <span class="red-color">*</span></span>
+
+                    </div>
+
+                    <div ng-controller="PostBookingController" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                        <input type="hidden" id="hdnIsGetMemberdetails" value="" />
+                        <input type="hidden" id="hdnMemberdetails" value="" />
+                        @{
+                            Html.RenderPartial("PostBookingPartial");
+                        }
+
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top30">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding pstbkng">
+                        <h4>Advance Search</h4>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                            @* placeholder="C&zwnj;ity" Use this code to Off Auto complete for crome (Manage Addresses) *@
+                            <span class="lh sf m-t-o" id="cityhedaing" style="visibility:hidden;"> City </span>
+                            <div angucomplete-alt id="txtautocomplete"
+                                 pause="100"
+                                 selected-object="AfterSelectedCity"
+                                 local-search="localSearch"
+                                 ng-keyup="OnKeyUpCity(selected);"
+                                 local-data="cities"
+                                 search-fields="display"
+                                 title-field="display"
+                                 minlength="0"
+                                 input-class="floating-inpt autocompleteinput m-t-10-xs "
+                                 match-class="highlight"
+                                 placeholder="C&zwnj;ity"
+                                 style="background:transparent url('../../images/da.png') no-repeat right center;background-position-y: 36px;"
+                                 initial-value="{{ProdReport.CityCountryName}}"
+                                 ng-model="ProdReport.CityId">
+                            </div>
+                            <input type="hidden" id="hdncityid" value="" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12  mrg-top40">
+                            <span class="floating-label-select" id="div_Supplier" style="display:none;"> Supplier  </span>
+                            <select class="select--hoshi" id="ddl_Supplier" [style.color]="Supplier==undefined?'#676767':'#000'"
+                                    (input)="ProdReport.SupplierId=$event.target.value" onchange="changeMe(this, 'div_Supplier')">
+                                <option value="0" selected hidden>Select Supplier</option>                              
+                                <option  value="{{SId}}" ng-repeat="s in Supplierlist">
+                                    {{s.SName}}
+                                </option>
+                            </select>
+                         </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12  mrg-top40">
+                            <span class="floating-label-select" id="div_Status" style="display:none;"> Status  </span>
+                            <select class="select--hoshi" id="ddl_Status" [style.color]="Status==undefined?'#676767':'#000'"
+                                     (input)="ProdReport.Status=$event.target.value" onchange="changeMe(this, 'div_Status')">
+                                <option value="0" selected hidden>Select Status</option>
+                                <option value="RQ"  >RQ</option>
+                                <option value="KK"  >KK</option>
+                                <option value="RR"  >RR</option>
+                                <option value="RN"  >RN</option>
+                                <option value="XX"  >XX</option>
+                                <option value="XN"  >XN</option>
+                            </select>
+                        </div>
+
+
+                        </div>
+                </div>
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20 mrg-btm10 nopadding">
+                    <div class="col-md-12 text-left mtb10">
+                        <div class="upt-prof-btn">
+                            <a class="btn hover-btn nomargin" ng-click="SearchReportClick()" data-toggle="collapse" data-target="#demo">Search</a>
+                            <a id="btnclose" class="btn search hover-btn" ng-click="ShowModifyBtn();" data-toggle="collapse" data-target="#demo"> &nbsp;Close </a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20" style="display:none;" id="RptDetails">
+           
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                            <label style="font-size:20px">Production Report</label>
+                            <br>
+                            <b>From: </b><span id="spDateFrom">{{ProdReport.From}}</span>&nbsp;
+                            <b>To: </b> <span id="spDateTo">{{ProdReport.To}}</span>&nbsp;
+                           
+                            <label><b>Showing Report For :</b> <span id="spBrchName" style="font-weight: normal !important">{{PostBooking.ReportCompanyName}}</span></label>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <div id="Hoteldiv">
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                        <span class="text-center" style="font-size:16px;"><b>Hotel</b></span>  
+                    </div>
+                   
+                        <table id="HotelReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs" style="width:100%;font-size:13px;padding: 5px 5px !important;">
+                            <thead id="hthead">
+                                <tr>
+                                    <th width="4%">&nbsp;&nbsp;</th>
+                                    <th width="10%">Book Ref No</th>
+                                    <th width="8%">Check In Date</th>
+                                    <th width="8%">Check Out Date</th>
+                                    <th width="5%">Nights </th>
+                                    <th width="10%">Service Name</th>
+
+                                    <th width="10%">City </th>
+
+                                    <th width="10%">Supplier Name</th>
+                                    <th width="10%">Status</th>
+                                    <th width="8%">Currency </th>
+                                    <th width="5%">Sell Amount </th>
+
+                                </tr>
+
+                            </thead>
+
+                        </table>
+                    
+                </div>
+
+                <br /><br />
+                <div id="Transferdiv">
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                        <span class="text-center" style="font-size:16px;"><b>Tranfer</b></span>
+                    </div>
+                    <table id="TranferReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs" style="width:100%;font-size:13px;padding: 5px 5px !important;">
+                        <thead id="hthead">
+                            <tr>
+                                <th></th>
+                                <th>Book Ref No</th>
+                                <th>Transfer Date</th>                               
+                                <th>Service Name</th>                               
+                                <th>Pick Up</th>
+                                <th>Drop Off</th>                              
+                                <th>City </th>                          
+                                <th>Supplier Name</th>
+                                <th>Status</th>
+                                <th>Currency </th>
+                                <th>Sell Amount </th>
+                            
+                            </tr>
+
+                        </thead>
+
+
+                    </table>
+                </div>
+                    <br /><br />
+                <div id="Tourdiv">
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                        <span class="text-center" style="font-size:16px;"><b>Tour</b></span>
+                    </div>
+                    <table id="TourReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs" style="width:100%;font-size:13px;padding: 5px 5px !important;">
+                        <thead id="hthead">
+                            <tr>
+                                <th></th>
+                                <th>Book Ref No</th>
+                                <th>Tour Date</th>                                
+                                <th>Service Name</th>                                                             
+                                <th>City </th>                               
+                                <th>Supplier Name</th>
+                                <th>Status</th>
+                                <th>Currency </th>
+                                <th>Sell Amount </th>
+                              
+                            </tr>
+
+                        </thead>
+
+
+                    </table>                   
+                </div>
+
+               
+                </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Noresultdiv" style="display:none;"> <h4 class="text-center bold">No Results Found!</h4></div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Errordiv" style="display:none;"> <h4 class="text-center bold">There is Some Error for Processing Report!</h4></div>
+      
+
+    </div>
+
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#ProductionReport").addClass("active");
+               
+            function changeMe(sel, id) {
+                $("#" + id).show();
+                sel.style.color = "#000";
+
+            }
+           });
+
+            $(function () {
+                $(".nav-link").on('click', function (event) {
+
+                    $("#" + event.target.id).addClass("active");
+                   
+                });
+            });
+    </script>
+
+
+</body>
+</html>
+

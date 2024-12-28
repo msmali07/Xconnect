@@ -1,0 +1,310 @@
+﻿
+@using Report.BLL;
+@using Report.DO;
+@using Report.Web;
+@using ReportViewerForMvc
+
+
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SalesReport</title>
+
+
+
+    <script src="~/libs/DataTables/jquery.dataTables.js"></script>
+    <script src="~/libs/DataTables/dataTables.rowGroup.min.js"></script>
+
+
+    <script src="~/libs/DataTables/dataTables.buttons.min.js"></script>
+    <script src="~/libs/DataTables/buttons.flash.min.js"></script>
+    <script src="~/libs/DataTables/buttons.html5.min.js"></script>
+    <script src="~/libs/DataTables/buttons.print.min.js"></script>
+    <script src="~/libs/jszip.min.js"></script>
+    <script src="~/libs/pdfmake.js"></script>
+    <script src="~/libs/vfs_fonts.js"></script>
+
+
+    <script src="~/Scripts/SalesReport.js"></script>
+
+
+</head>
+
+<body ng-app="Salereportapp" ng-controller="SalereportCntr" id="MainWrap">
+
+    <input type="hidden" id="hdnParentmemberid" value="" />
+    <input type="hidden" id="hdnParenttypeid" value="" />
+    <input type="hidden" id="hdnsearchtype" value="@TempData["SearchType"]" />
+    <input type="hidden" id="hdnFilterKey" value="@ViewBag.FilterKey" />
+    <input type="hidden" id="hdnRptParam" value="@ViewBag.RptSearch" />
+
+    <div id="MainBody" runat="server" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+        <div id="HeaderSearchdiv" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 container mrg-top40">
+            <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12 mtb10 hdbg bdr1 bdr-btm0" id="divhdeading">
+
+                <h3>Sales Report</h3>
+                <span ng-hide="ModifySearch" class="pull-right mrg-top05" id="modifyserach">
+                    <a id="btnModifySearch" class="btn search hover-btn" data-toggle="collapse" data-target="#demo"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> &nbsp;Modify seach </a>
+                </span>
+            </div>
+
+            <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg2 collapse  bdr1 bdr-top0" id="demo" style="box-shadow:none !important;">
+
+               
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-btm10 nopadding">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <select class="select--hoshi" id="ddl_CustomDateRange" (input)="ReportFilter.CustomDateOption=$event.target.value">
+                            <option value="">Custom Date Range</option>
+
+
+                            <option ng-selected="ReportFilter.CustomDateOption == dd.Values" value="{{dd.Values}}" ng-repeat="dd in DateRangeList">
+                                {{dd.Name}}
+                            </option>
+                        </select>
+
+
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="SaleReport.ChkInDateFrom" id="txtChcekInFromDate">
+                        <span class="floating-label" id="spArrivalFromDate">CheckIn From Date <span class="red-color">*</span></span>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="SaleReport.ChkInDateTo" id="txtChcekInToDate">
+                        <span class="floating-label" id="spArrivalToDate">CheckIn To Date <span class="red-color">*</span></span>
+
+                    </div>
+
+                    <div ng-controller="PostBookingController" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                        <input type="hidden" id="hdnIsGetMemberdetails" value="" />
+                        <input type="hidden" id="hdnMemberdetails" value="" />
+                        @{
+                            Html.RenderPartial("PostBookingPartial");
+                        }
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top30">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding pstbkng">
+                        <h4>Advance Search</h4>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                            <label>
+                                Report View By  :
+                            </label>
+                            <select class="select--hoshi" id="ddl_Grp">
+
+                                <option value="">None</option>
+                                <option ng-selected="ReportFilter.GroupBy == '6'" value="6~Agency Name">By Agency</option>
+                                <option ng-selected="ReportFilter.GroupBy == '9'" value="9~Booking Status">By Booking Status</option>
+                                <option ng-selected="ReportFilter.GroupBy == '4'" value="4~Destination">By Destination</option>
+                                <option ng-selected="ReportFilter.GroupBy == '10'" value="10~Currency">By Currency</option>
+                            </select>
+
+
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-btm20 mrg-top20">
+                            <label>
+                                Column hide from Report :
+                            </label>
+
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-lft10" id="Hidecolumlist">
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="1" id="radio5">
+                                    <label class="radio-label" for="radio5">&nbsp; Chcek In Date</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="2" id="radio6">
+                                    <label class="radio-label" for="radio6">&nbsp; Chcek Out Date</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="3" id="radio7">
+                                    <label class="radio-label" for="radio7">&nbsp; Nights</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="5" id="radio8">
+                                    <label class="radio-label" for="radio8">&nbsp; Service Name </label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="7" id="radio9">
+                                    <label class="radio-label" for="radio9">&nbsp; Supplier</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="8" id="radio12">
+                                    <label class="radio-label" for="radio12">&nbsp; Supplier Ref No</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="12" id="radio10">
+                                    <label class="radio-label" for="radio10">&nbsp; Commission</label>
+                                </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="13" id="radio11">
+                                    <label class="radio-label" for="radio11">&nbsp; BookPaidAmt</label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20 mrg-btm10 nopadding">
+                    <div class="col-md-12 text-left mtb10">
+                        <div class="upt-prof-btn">
+                            <a class="btn hover-btn nomargin" ng-click="SearchReportClick()" data-toggle="collapse" data-target="#demo">Search</a>
+                            <a id="btnclose" class="btn search hover-btn" ng-click="ShowModifyBtn();" data-toggle="collapse" data-target="#demo"> &nbsp;Close </a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20" style="display:none;" id="RptDetails">
+         
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                            <label style="font-size:20px">Sales Report</label>
+                            <br>
+                            <b>From: </b><span id="spDateFrom">{{SaleReport.ChkInDateFrom}}</span>&nbsp;
+                            <b>To: </b> <span id="spDateTo">{{SaleReport.ChkInDateTo}}</span>&nbsp;
+                            <br />
+                            <span>
+                                <b ng-if="ReportFilter.GroupBy!=''">View By: </b> <span>{{GroupingName}} </span>
+                            </span>
+                            <label><b>Showing Report For :</b> <span id="spBrchName" style="font-weight: normal !important">{{PostBooking.ReportCompanyName}}</span></label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mrg-btm5" style="float:right;width:17%;">
+                    <a data-toggle="collapse" data-target="#hidelistdiv" style="cursor:pointer;">Hide Columns Visibility </a>
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 collapse mrg-top10" id="hidelistdiv">
+
+
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE" value="2" id="hidet1" ng-value="1" ng-click="fnShowHide(1)" /> <label class="radio-label mrg-lft15" for="hidet1">Chcek In Date</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE2" value="2" id="hidet2" ng-value="2" ng-click="fnShowHide(2)" /> <label class="radio-label mrg-lft15" for="hidet2">Chcek Out Date</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="3" id="hidet3" ng-value="3" ng-click="fnShowHide(3)" /> <label class="radio-label mrg-lft15" for="hidet3">Nights</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="5" id="hidet4" ng-value="5" ng-click="fnShowHide(5)" /> <label class="radio-label mrg-lft15" for="hidet4">Service Name</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="7" id="hidet5" ng-value="7" ng-click="fnShowHide(7)" /> <label class="radio-label mrg-lft15" for="hidet5">Supplier</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="8" id="hidet6" ng-value="8" ng-click="fnShowHide(8)" /> <label class="radio-label mrg-lft15" for="hidet6">Supplier Ref No</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="12" id="hidet7" ng-value="12" ng-click="fnShowHide(12)" /> <label class="radio-label mrg-lft15" for="hidet7">Commission</label>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-12 nopadding">
+
+                            <input type="checkbox" name="HIDE3" value="13" id="hidet8" ng-value="13" ng-click="fnShowHide(13)" /> <label class="radio-label mrg-lft15" for="hidet8">BookPaidAmt</label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <table id="SalesReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs" style="width:1500px;font-size:13px;padding: 5px 5px !important;">
+                    <thead class="main-head hidden-xs" style="width:1500px;">
+                        <tr>
+
+                            <th width="10%">Book Ref No</th>
+                            <th width="10%">Chcek In Date</th>
+                            <th width="10%" >Chcek Out Date</th>
+                            <th width="10%">Nights</th>
+                            <th width="10%">Destination </th>
+                            <th width="10%">Service Name</th>
+                            <th width="10%">Agency Name   </th>
+
+                            <th width="10%">Supplier </th>
+                            <th width="10%">Supplier Ref No </th>
+                            <th width="10%">Book Status</th>
+                            <th width="10%">Currency</th>
+                            <th width="10%">Sell Amount </th>
+                            <th width="10%">Commision </th>
+                            <th width="10%">Book Paid Amount </th>
+                          
+                           
+
+                        </tr>
+
+                    </thead>
+
+
+                </table>
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Noresultdiv" style="display:none;"> <h4 class="text-center bold">No Results Found!</h4></div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Errordiv" style="display:none;"> <h4 class="text-center bold">There is Some Error for Processing Report!</h4></div>
+       
+    </div>
+
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#SReport").addClass("active");
+                $(".date-cal").datepicker({ dateFormat: 'dd M yy', numberOfMonths: 2, });
+              
+            });
+
+
+
+            $("#txtArrivalFromDate").change(function () {
+                $("#ddl_CustomDateRange")[0].selectedIndex = 0;
+            });
+
+            function changeMe(sel, id) {
+                $("#" + id).show();
+                sel.style.color = "#000";
+
+            }
+
+    </script>
+
+
+</body>
+</html>
+
+
+

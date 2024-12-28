@@ -1,0 +1,209 @@
+﻿@using Report.BLL;
+@using Report.DO;
+@using Report.Web;
+@using ReportViewerForMvc
+@*@using Newtonsoft.Json*@
+
+
+@model Report.DO.CreditReportDO
+
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Credit Report</title>
+   
+    <script src="~/Scripts/CreditReport.js?v1"></script>
+
+</head>
+
+<body ng-app="reportapp" ng-controller="CreditCntr" id="MainWrap">
+
+    <input type="hidden" id="hdnParentmemberid" value="" />
+    <input type="hidden" id="hdnParenttypeid" value="" />
+    <input type="hidden" id="hdnsearchtype" value="@TempData["SearchType"]"  />
+    <input type="hidden" id="hdnFilterKey" value="@ViewBag.FilterKey" />
+    <input type="hidden" id="hdnRptParam" value="@ViewBag.RptSearch" />
+
+
+   
+
+    <div id="MainBody" runat="server" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+        <div id="HeaderSearchdiv" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 container mrg-top40">
+            <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12 mtb10 hdbg bdr1 bdr-btm0" id="divhdeading">
+               
+                <h3>Credit Report</h3>
+                <span ng-hide="ModifySearch" class="pull-right mrg-top05" id="modifyserach">
+                    <a  id="btnModifySearch" class="btn search hover-btn" data-toggle="collapse" data-target="#demo"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> &nbsp;Modify seach </a>
+                </span>
+            </div>
+
+            <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg2 collapse  bdr1 bdr-top0"  id="demo" style="box-shadow:none !important;">
+             
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-btm10 nopadding">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <select class="select--hoshi" id="ddl_CustomDateRange"  (input)="ReportFilter.CustomDateOption=$event.target.value">
+                            <option value="">Custom Date Range</option>
+
+
+                            <option   ng-selected="ReportFilter.CustomDateOption == dd.Values" value="{{dd.Values}}" ng-repeat="dd in DateRangeList">
+                                {{dd.Name}}
+                            </option>
+                        </select>
+
+
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="CreditReport.FromDate"  id="txtFromDate">
+                        <span class="floating-label" id="spArrivalFromDate">From Date <span class="red-color">*</span></span>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="CreditReport.ToDate" id="txtToDate">
+                        <span class="floating-label" id="spArrivalToDate">To Date <span class="red-color">*</span></span>
+
+                    </div>
+
+                    <div ng-controller="PostBookingController" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" >
+                        <input type="hidden" id="hdnIsGetMemberdetails" value="" />
+                        <input type="hidden" id="hdnMemberdetails" value="" />
+                       
+                        @{
+                            Html.RenderPartial("PostBookingPartial");
+                        }
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top30">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding pstbkng">
+                        <h4>Advance Search</h4>
+                      
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 mrg-btm20 mrg-top20">
+                            <label>
+                                Column hide from Report :
+                            </label>
+
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-lft10" id="Hidecolumlist">
+
+                               
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input type="checkbox" name="HIDE" value="Paxname" id="radio9">
+                                    <label class="radio-label" for="radio9">&nbsp; Pax Name</label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20 mrg-btm10 nopadding">
+                    <div class="col-md-12 text-left mtb10">
+                        <div class="upt-prof-btn">
+                            <a class="btn hover-btn nomargin"  data-toggle="collapse" data-target="#demo" ng-click="SearchReportClick()">Search</a>
+                            <a id="btnclose" class="btn search hover-btn" ng-click="ShowModifyBtn();" data-toggle="collapse" data-target="#demo"> &nbsp;Close </a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20" style="display:none;" id="RptDetails">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6 nopadding">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 nopadding">
+                                <b>From: </b><span id="spDateFrom">{{CreditReport.FromDate}}</span>&nbsp;
+                                <b>To: </b> <span id="spDateTo">{{CreditReport.ToDate}}</span>&nbsp;
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 nopadding text-center text-left-xs">
+                                <span>
+                                    <b ng-if="Grouping!=''">View By: </b> <span>{{GroupingName}} </span>
+                                </span>
+                                <label><b>Showing Report For :</b> <span id="spBrchName" style="font-weight: normal !important">{{PostBooking.ReportCompanyName}}</span></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 nopadding">
+                            <span id="totalrecord" class="pull-right text-right" style="font-weight: normal !important;"><b>Total Records :</b> {{TotalRecords}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (ViewBag.ReportViewer != null)
+                {
+                    @Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer)
+
+                }
+
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Noresultdiv" style="display:none;"> <h4 class="text-center bold">No Results Found!</h4></div>
+      
+
+    </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".date-cal").datepicker({ dateFormat: 'dd M yy', numberOfMonths: 2, });
+           // $(window).scroll(function (e) {
+              //  var $el = $('#HeaderSearchdiv');
+              ////  var isPositionFixed = ($el.css('position') == 'fixed');
+               // if ($(this).scrollTop() > 200 && !isPositionFixed) {
+               //     $el.css({ 'position': 'fixed', 'top': '0px', 'width': '100%' });
+              //  }
+              //  if ($(this).scrollTop() < 200 && isPositionFixed) {
+               //     $el.css({ 'position': 'static', 'top': '0px' });
+               // }
+          //  });
+            if(@Model.TotalRecords != 0)
+            {
+              
+                var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ResultJosn, Newtonsoft.Json.Formatting.Indented));
+                var totalcount = @Model.TotalRecords ;
+                GetDetail(data, totalcount);
+            }
+           
+
+
+        });
+
+
+
+        $("#txtArrivalFromDate").change(function () {
+            $("#ddl_CustomDateRange")[0].selectedIndex = 0;
+        });
+
+        function changeMe(sel, id) {
+            $("#" + id).show();
+            sel.style.color = "#000";
+
+        }
+
+    </script>
+
+
+</body>
+</html>
+

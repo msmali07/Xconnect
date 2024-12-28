@@ -1,0 +1,1381 @@
+﻿
+@using Report.BLL;
+@using Report.DO;
+@using Report.Web;
+@using ReportViewerForMvc
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DashBoard</title>
+    <script src="~/Scripts/HomeDashboard_V1.js?v14"></script>
+
+    <style>
+        .tooltips {
+            position: relative;
+        }
+
+            .tooltips .tooltipstext {
+                visibility: hidden;
+                width: 150px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+            }
+
+            .tooltips:hover .tooltipstext {
+                visibility: visible;
+            }
+    </style>
+
+</head>
+
+<body ng-app="homeDashboard_V1app" ng-controller="homeDashboard_V1Cntr" id="MainWrap">
+    @if (@SessionContext.Current.AISession.ReportRole.SalesLoginAccess == true)
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg mrg-btm0 nopadding" ng-style="{'display':SalesPersonAcessList.length>0?'block':'none'}" ng-if="SalesPersonAcessList.length>0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 30px;">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                    <label class="mrg-top05">
+                        <b> Sales Person Access:</b>
+                    </label>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                    <select class="select--hoshi padd-lft05" id="ddlSalesPersonReportAcess" (input)="SalesMember_UserID=$event.target.value">
+                        <option value="0">-- Select Sales Person --</option>
+                        <option value="{{m.MemberId}}~{{m.UserId}}" ng-repeat="m in SalesPersonAcessList">
+                            {{m.SalesPersonName}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                    <a class="btn hover-btn nomargin" ng-click="SalesPerSearch();">Search</a>
+                    <a id="btnclose" class="btn search hover-btn" ng-click="ClearAccess();"> &nbsp;Clear </a>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  mrg-top20 mrg-lft10">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20" style="width:99%">
+
+            <div class="panel Hmpanel-table" style="min-height:auto !important;">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> OVERVIEW</h4>
+                    <h6 style="color: #b50000;" ng-show="MainResultlist3.length>0">Last Updated Date :  {{UpdatedDateOverview}}</h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/OverviewRpt" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div ng-show="overiew">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="OverviewReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+                           ng-show="MainResultlist3.length > 0" style="">
+                        <thead class="main-head hidden-xs" id="theaddiv1">
+                            <tr>
+                                <th>Report</th>
+                                <th style="text-align:right;">Jan</th>
+                                <th style="text-align:right;">Feb</th>
+                                <th style="text-align:right;">Mar</th>
+                                <th style="text-align:right;">Apr</th>
+                                <th style="text-align:right;">May</th>
+                                <th style="text-align:right;">Jun</th>
+                                <th style="text-align:right;">Jul</th>
+                                <th style="text-align:right;">Aug</th>
+                                <th style="text-align:right;">Sep</th>
+                                <th style="text-align:right;">Oct</th>
+                                <th style="text-align:right;">Nov</th>
+                                <th style="text-align:right;">Dec</th>
+                                <th style="text-align:right;">Summary</thstyle="text-align:right;">
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main">
+                            <tr ng-repeat="a in MainResultlist3">
+                                <td style="font-weight: bold !important">{{a.RName}}</td>
+                                <td style="text-align:right;">{{a.Jan}}</td>
+                                <td style="text-align:right;">{{a.Feb}}</td>
+                                <td style="text-align:right;">{{a.Mar}}</td>
+                                <td style="text-align:right;">{{a.Apr}}</td>
+                                <td style="text-align:right;">{{a.May}}</td>
+                                <td style="text-align:right;">{{a.Jun}}</td>
+                                <td style="text-align:right;">{{a.Jul}}</td>
+                                <td style="text-align:right;">{{a.Aug}}</td>
+                                <td style="text-align:right;">{{a.Sep}}</td>
+                                <td style="text-align:right;">{{a.Oct}}</td>
+                                <td style="text-align:right;">{{a.Nov}}</td>
+                                <td style="text-align:right;">{{a.Dec}}</td>
+                                <td style="text-align:right;">{{a.Summary}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> HOTEL - RN</h4>
+                    <h6 style="color: #b50000;" ng-show="MainResultlist1.length > 0">Last Updated Date :  {{UpdatedHotelRNdate}}</h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/HotelRNReport" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div ng-show="AgDataLoading">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="HotelRNReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlist1.length > 0">
+                        <thead class="main-head hidden-xs">
+                            <tr>
+                                <th>Hotel Name</th>
+                                <th>Destination</th>
+                                @*<th class="tooltips" >CFY<span class="tooltipstext">Current Financial Year</span></th>*@
+                                <th title="Current Financial Year" style="text-align:right;">CFY</th>
+                                <th title="Last Financial Year" style="text-align:right;">LFY</th>
+                                <th title="Current Vs Last Financial Year Percentage" style="text-align:right;">VS%</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main">
+                            <tr ng-repeat="a in MainResultlist1">
+                                <td>{{a.HName}}</td>
+                                <td>{{a.Dest}}</td>
+                                <td style="text-align:right;">{{a.CFY}}</td>
+                                <td style="text-align:right;">{{a.LFY}}</td>
+                                <td style="text-align:right;">{{a.Vs}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> DESTINATION</h4>
+                    <h6 style="color: #b50000;" ng-show="MainResultlistDest.length > 0">Last Updated Date :  {{UpdatedDestDate}}</h6>
+                    <h6 style="color: #b50000;" ng-show="MainResultlistDest.length > 0">Top Results of {{UpdateDestMonth}}</h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/Destination" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div ng-show="AgDataLoading">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="DestinationReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistDest.length > 0">
+                        <thead class="main-head hidden-xs">
+                            <tr>
+                                <th>Destination</th>
+                                <th title="Room Nights" style="text-align:right;">RN</th>
+                                <th title="Reconfirm Bookings" style="text-align:right;">BKG</th>
+                                <th title="Average Booking Value" style="text-align:right;">ABV</th>
+                                <th title="" style="text-align:right;">LOS</th>
+                                <th style="text-align:right;">L2B</th>
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main">
+                            <tr ng-repeat="a in MainResultlistDest">
+                                <td>{{a.Dest}}</td>
+                                <td style="text-align:right;">{{a.RN}}</td>
+                                <td style="text-align:right;">{{a.Bgs}}</td>
+                                <td style="text-align:right;">{{a.ABV}}</td>
+                                <td style="text-align:right;">{{a.LOS}}</td>
+                                <td style="text-align:right;">{{a.L2B}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  mrg-top20 mrg-lft10">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20" style="width:99%">
+            <div class="panel Hmpanel-table" style="min-height:auto !important;">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> SALES OVERVIEW</h4>
+                    @*<h6 style="color: #b50000;">Last Updated Date :  {{UpdateSalesOverviewDate}}</h6>*@
+                    <h6 style="color: #b50000;" id="SaleOverdate"> </h6>
+                    <h6 style="color: #b50000;" id="SaleOverMonth"> </h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/SalesOverview" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="SALESOVERVIEWPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="SalesOverviewReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+                           style="font-size:13px;padding: 5px 5px !important;">
+                    </table>
+
+                    @*<table id="SalesOverviewReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+                               style="font-size:13px;padding: 5px 5px !important;" ng-show="MainResultlistSalesOverview.length > 0">
+                            <thead class="main-head hidden-xs" id="theaddiv1">
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Type</th>
+                                    <th>Market</th>
+                                    <th style="text-align:right;">TTV(K)</th>
+                                    <th style="text-align:right;">Bookings</th>
+                                    <th title="Cancellation" style="text-align:right;">CXL</th>
+                                    <th title="Cancellation Percentage" style="text-align:right;">CXL%</th>
+                                    <th title="Room Nights" style="text-align:right;">RN</th>
+                                    <th style="text-align:right;">AVBV</th>
+                                    <th title="Oprating Margine" style="text-align:right;" ng-if="LoginMemberTypeID==1">OM %</th>
+                                    <th style="text-align:right;">Booking Error %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistSalesOverview">
+                                    <td>{{a.CName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td>{{a.Market}}</td>
+                                    <td style="text-align:right;">{{a.TTV_K}}</td>
+                                    <td style="text-align:right;">{{a.Bgs}}</td>
+                                    <td style="text-align:right;">{{a.CXL}}</td>
+                                    <td style="text-align:right;">{{a.CXL_Per}}</td>
+                                    <td style="text-align:right;">{{a.RN}}</td>
+                                    <td style="text-align:right;">{{a.AVBV}}</td>
+                                    <td style="text-align:right;" ng-if="LoginMemberTypeID==1">{{a.OM_Per}}</td>
+                                    <td style="text-align:right;">{{a.Bk_Err_Per}}</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> TOP SELLING HOTEL</h4>
+                    <h6 style="color: #b50000;" id="SaleHoteldate"></h6>
+                    <h6 style="color: #b50000;" id="SaleHotelmonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/HotelSales" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="SELLINGHOTELPopUp">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="HotelSalesReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                    </table>
+                    @*<table id="HotelSalesReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistHSales.length > 0">
+                            <thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Destination</th>
+                                    <th title="Room Nights" style="text-align:right;">RN</th>
+                                    <th title="Bookings" style="text-align:right;">BKG</th>
+                                    <th title="Average Booking Value" style="text-align:right;">ABV</th>
+                                    <th style="text-align:right;">LOS</th>
+                                    <th style="text-align:right;">L2B</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistHSales">
+                                    <td>{{a.HName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.RN}}</td>
+                                    <td style="text-align:right;">{{a.Bgs}}</td>
+                                    <td style="text-align:right;">{{a.ABV}}</td>
+                                    <td style="text-align:right;">{{a.LOS}}</td>
+                                    <td style="text-align:right;">{{a.L2B}}</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> TOP SELLING DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="SaleDestidate"></h6>
+                    <h6 style="color: #b50000;" id="SaleDestimonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/DestinationSales" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="DestinationSaleReportPopUp">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="DestinationSaleReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                    </table>
+                    @*<table id="DestinationSaleReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistSalesDest.length > 0">
+                            <thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th title="Room Nights" style="text-align:right;">RN</th>
+                                    <th title="Bookings" style="text-align:right;">BKG</th>
+                                    <th title="Average Booking Value" style="text-align:right;">ABV</th>
+                                    <th style="text-align:right;">LOS</th>
+                                    <th style="text-align:right;">L2B</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistSalesDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.RN}}</td>
+                                    <td style="text-align:right;">{{a.Bgs}}</td>
+                                    <td style="text-align:right;">{{a.ABV}}</td>
+                                    <td style="text-align:right;">{{a.LOS}}</td>
+                                    <td style="text-align:right;">{{a.L2B}}</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    @*--------------------------  SUPPLIER OVERVIEW  -------------------------------*@
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  mrg-top20 mrg-lft10">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20" style="width:99%">
+            <div class="panel Hmpanel-table" style="min-height:auto !important;">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> SUPPLIER OVERVIEW</h4>-->
+    @*<h6 style="color: #b50000;">Last Updated Date :  {{UpdateSalesOverviewDate}}</h6>*@
+    <!--<h6 style="color: #b50000;" id="SuppSaleOverdate"> </h6>
+        <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+        <a target="_blank" href="~/Dashboard_V1/SupplierOverviewReport" class="HmView-more2" title="Click to view more">View More</a>
+    </div>
+    <div class="padd15" ng-show="AgNoRecords">
+        <sapn>No Records Found</sapn>
+    </div>
+    <div id="SupplierOverviewPopup">
+        <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+    </div>
+
+    <div class="table-responsive" style="padding: 17px;">
+        <table id="SupplierOverviewReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+               style="font-size:13px;padding: 5px 5px !important;">
+        </table>-->
+    @*<table id="SalesOverviewReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+               style="font-size:13px;padding: 5px 5px !important;" ng-show="MainResultlistSalesOverview.length > 0">
+            <thead class="main-head hidden-xs" id="theaddiv1">
+                <tr>
+                    <th>Client Name</th>
+                    <th>Type</th>
+                    <th>Market</th>
+                    <th style="text-align:right;">TTV(K)</th>
+                    <th style="text-align:right;">Bookings</th>
+                    <th title="Cancellation" style="text-align:right;">CXL</th>
+                    <th title="Cancellation Percentage" style="text-align:right;">CXL%</th>
+                    <th title="Room Nights" style="text-align:right;">RN</th>
+                    <th style="text-align:right;">AVBV</th>
+                    <th title="Oprating Margine" style="text-align:right;" ng-if="LoginMemberTypeID==1">OM %</th>
+                    <th style="text-align:right;">Booking Error %</th>
+
+                </tr>
+            </thead>
+            <tbody class="hsrr-tbody-main">
+                <tr ng-repeat="a in MainResultlistSalesOverview">
+                    <td>{{a.CName}}</td>
+                    <td>{{a.Type}}</td>
+                    <td>{{a.Market}}</td>
+                    <td style="text-align:right;">{{a.TTV_K}}</td>
+                    <td style="text-align:right;">{{a.Bgs}}</td>
+                    <td style="text-align:right;">{{a.CXL}}</td>
+                    <td style="text-align:right;">{{a.CXL_Per}}</td>
+                    <td style="text-align:right;">{{a.RN}}</td>
+                    <td style="text-align:right;">{{a.AVBV}}</td>
+                    <td style="text-align:right;" ng-if="LoginMemberTypeID==1">{{a.OM_Per}}</td>
+                    <td style="text-align:right;">{{a.Bk_Err_Per}}</td>
+                </tr>
+            </tbody>
+        </table>*@
+    <!--</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">-->
+    @*--------------------------  TOP SELLING HOTEL SUPPLIER WISE  -------------------------------*@
+    <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+        <div class="panel Hmpanel-table">
+            <div class="Hmpanel-heading">
+                <h4 class="Hmpanel-title"> TOP SELLING HOTEL ( SUPPLIER WISE ) </h4>
+                <h6 style="color: #b50000;" id="SuppSaleHoteldate"></h6>
+                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                <a target="_blank" href="~/Dashboard_V1/SuppTopSellHotelRpt" class="HmView-more2" title="Click to view more">View More</a>
+            </div>
+            <div class="padd15" ng-show="AgNoRecords">
+                <sapn>No Records Found</sapn>
+            </div>
+            <div id="TopSellHotelSuppwisePopUp">
+                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+            </div>
+
+            <div class="table-responsive" style="padding: 17px;">
+                <table id="TopSellHotelSuppwiseReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                </table>-->
+    @*<table id="HotelSalesReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistHSales.length > 0">
+            <thead class="main-head hidden-xs">
+                <tr>
+                    <th>Hotel Name</th>
+                    <th>Destination</th>
+                    <th title="Room Nights" style="text-align:right;">RN</th>
+                    <th title="Bookings" style="text-align:right;">BKG</th>
+                    <th title="Average Booking Value" style="text-align:right;">ABV</th>
+                    <th style="text-align:right;">LOS</th>
+                    <th style="text-align:right;">L2B</th>
+                </tr>
+            </thead>
+            <tbody class="hsrr-tbody-main">
+                <tr ng-repeat="a in MainResultlistHSales">
+                    <td>{{a.HName}}</td>
+                    <td>{{a.Dest}}</td>
+                    <td style="text-align:right;">{{a.RN}}</td>
+                    <td style="text-align:right;">{{a.Bgs}}</td>
+                    <td style="text-align:right;">{{a.ABV}}</td>
+                    <td style="text-align:right;">{{a.LOS}}</td>
+                    <td style="text-align:right;">{{a.L2B}}</td>
+                </tr>
+            </tbody>
+        </table>*@
+    <!--</div>
+        </div>
+    </div>-->
+    @*--------------------------  TOP SELLING DESTINATION SUPPLIER WISE  -------------------------------*@
+    <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+        <div class="panel Hmpanel-table">
+            <div class="Hmpanel-heading">
+                <h4 class="Hmpanel-title"> TOP SELLING DESTINATION ( SUPPLIER WISE )</h4>
+                <h6 style="color: #b50000;" id="SuppSaleDestidate"></h6>
+                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                <a target="_blank" href="~/Dashboard_V1/SuppTopSellDestRpt" class="HmView-more2" title="Click to view more">View More</a>
+            </div>
+            <div class="padd15" ng-show="AgNoRecords">
+                <sapn>No Records Found</sapn>
+            </div>
+            <div id="TopSellDestSuppwiseReportPopUp">
+                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+            </div>
+
+            <div class="table-responsive" style="padding: 17px;">
+                <table id="TopSellDestSuppwiseReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                </table>-->
+    @*<table id="DestinationSaleReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistSalesDest.length > 0">
+            <thead class="main-head hidden-xs">
+                <tr>
+                    <th>Destination</th>
+                    <th title="Room Nights" style="text-align:right;">RN</th>
+                    <th title="Bookings" style="text-align:right;">BKG</th>
+                    <th title="Average Booking Value" style="text-align:right;">ABV</th>
+                    <th style="text-align:right;">LOS</th>
+                    <th style="text-align:right;">L2B</th>
+                </tr>
+            </thead>
+            <tbody class="hsrr-tbody-main">
+                <tr ng-repeat="a in MainResultlistSalesDest">
+                    <td>{{a.Dest}}</td>
+                    <td style="text-align:right;">{{a.RN}}</td>
+                    <td style="text-align:right;">{{a.Bgs}}</td>
+                    <td style="text-align:right;">{{a.ABV}}</td>
+                    <td style="text-align:right;">{{a.LOS}}</td>
+                    <td style="text-align:right;">{{a.L2B}}</td>
+                </tr>
+            </tbody>
+        </table>*@
+    <!--</div>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  mrg-top20 mrg-lft10">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20" style="width:99%">
+            <div class="panel Hmpanel-table" style="min-height:auto !important;" ng-if="IsSalePerson=='False'">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title"> SUPPLIER Vs CLIENT </h4>
+                    <h6 style="color: #b50000;" id="SuppVsClientdate"></h6>
+                    <h6 style="color: #b50000;" id="SuppVsClientmonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/SupplierVsClient" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="SuppVsClientReportPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="SuppVsClientReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+                           style="font-size:13px;padding: 5px 5px !important;">
+                    </table>
+                    @*<table id="SuppVsClientReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse"
+                               style="font-size:13px;padding: 5px 5px !important;" ng-show="MainResultlistSuppVsClient.length > 0">
+                            <thead class="main-head hidden-xs" id="theaddiv1">
+                                <tr>
+                                    <th>Suppliers Name</th>
+                                    <th>Client Name</th>
+                                    <th>Market</th>
+                                    <th title="Key Account Manager">KAM</th>
+                                    <th style="text-align:right;">TTV(K)</th>
+                                    <th title="Bookings" style="text-align:right;">BKG</th>
+                                    <th title="Room Nights" style="text-align:right;">RN</th>
+                                    <th style="text-align:right;">AVBV</th>
+                                    <th title="Operating Margine Percentage" style="text-align:right;" ng-if="LoginMemberTypeID==1">OM %</th>
+                                    <th title="Cancellation" style="text-align:right;">CXL</th>
+                                    <th title="Cancellation Percentage" style="text-align:right;">CXL %</th>
+                                    <th style="text-align:right;">Booking Error %</th>
+                                    <th style="text-align:right;">L2B</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistSuppVsClient">
+                                    <td>{{a.SupplierName}}</td>
+                                    <td>{{a.ClientName}}</td>
+                                    <td>{{a.Market}}</td>
+                                    <td> {{a.Owner}} </td>
+                                    <td style="text-align:right;">{{a.TTV_K}}</td>
+                                    <td style="text-align:right;">{{a.Bookings}}</td>
+                                    <td style="text-align:right;">{{a.RN}}</td>
+                                    <td style="text-align:right;">{{a.AVBV}}</td>
+                                    <td style="text-align:right;" ng-if="LoginMemberTypeID==1">{{a.OM_Per}}</td>
+                                    <td style="text-align:right;">{{a.CXL}}</td>
+                                    <td style="text-align:right;">{{a.CXL_Per}}</td>
+                                    <td style="text-align:right;">{{a.Bk_Err_Per}}</td>
+                                    <td style="text-align:right;">{{a.L2B}}</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    @*-------------------------------------------------------------------------------------------------------------*@
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">LM VS EARLY BOOKING CLIENT</h4>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBCDate"></h6>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBCMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/LMVsEarlyBookingsClients" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="LMVSEARLYBOOKINGPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="LMVSEARLYReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                    </table>
+                    @*<table id="HotelRNReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="MainResultlistLMvsEarlyBookingClient.length > 0">
+                            <thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Type</th>
+                                    <th>Market</th>
+                                    <th title="Key Account Manager">KAM</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistLMvsEarlyBookingClient">
+
+                                    <td>{{a.ClientName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td>{{a.Market}}</td>
+                                    <td>{{a.Owner}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-if="IsSalePerson=='False'" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">LM VS EARLY BOOKING SUPPLIER</h4>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBSDate"></h6>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBSMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/LMVsEarlyBookingsSupplier" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="LMVSEARLYSupplierPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="LMVSEARLYSupplierReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Supplier Name</th>
+                                    <th>Type</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistLMvsEarlyBookingSupplier">
+                                    <td>{{a.SupplierName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">LM VS EARLY BOOKING HOTEL</h4>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBHDate"></h6>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBHMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/LMVsEarlyBookingsHotel" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="LMVSHotelReportPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="LMVSHotelReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistLMvsEarlyBookingHotel">
+                                    <td>{{a.HotelName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">LM VS EARLY BOOKING DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBDDate"></h6>
+                    <h6 style="color: #b50000;" id="LmVsEarlyBDMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/LMVsEarlyBookingsDestination" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="LMDestinationReportPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="LMDestinationReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistLMvsEarlyBookingDestination">
+                                    <td>{{a.Market}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">CANCELLATION CLIENTS </h4>
+                    <h6 style="color: #b50000;" id="CanClientDate"></h6>
+                    <h6 style="color: #b50000;" id="CanClientMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/CancelationClient" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="CanCXLClientPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="CanCXLClientReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Type</th>
+                                    <th>Market</th>
+
+                                    <th title="Key Account Manager">KAM</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistCXLClient">
+                                    <td>{{a.ClientName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td>{{a.Market}}</td>
+                                    <td>{{a.Owner}}</td>
+                                    <td style="text-align:right;">{{a.T_booking}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="" ng-if="IsSalePerson=='False'">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">CANCELLATION SUPPLIER</h4>
+                    <h6 style="color: #b50000;" id="CanSupplierDate"></h6>
+                    <h6 style="color: #b50000;" id="CanSupplierMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/CancelationSupplier" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="CanCXLSUPPLIERPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="CanCXLSUPPLIERReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Supplier Name</th>
+                                    <th>Type</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistCXLSupplier">
+                                    <td>{{a.SupplierName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td style="text-align:right;">{{a.T_booking}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">CANCELLATION HOTEL</h4>
+                    <h6 style="color: #b50000;" id="CanHotelDate"></h6>
+                    <h6 style="color: #b50000;" id="CanHotelMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/CancelationHotel" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="cancelationHotelPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="cancelationHotelReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistcancelationHotel">
+                                    <td>{{a.HotelName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_booking}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">CANCELLATION DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="CanDestinationDate"></h6>
+                    <h6 style="color: #b50000;" id="CanDestinationMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/CancelationDestination" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="CanDestPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="CanDestReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">LM %</th>
+                                    <th style="text-align:right;">7To30 %</th>
+                                    <th style="text-align:right;">+30 %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistCXLDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_booking}}</td>
+                                    <td style="text-align:right;">{{a.LM}}</td>
+                                    <td style="text-align:right;">{{a.SevToThirty}}</td>
+                                    <td style="text-align:right;">{{a.ThirtyPlus}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">NR VS REFUNDABLE CLIENTS </h4>
+                    <h6 style="color: #b50000;" id="NRVsRFClientDate"></h6>
+                    <h6 style="color: #b50000;" id="NRVsRFClientMonths"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/NRVsRefundableClient" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="NRVsRefClientPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="NRVsRefClientReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Type</th>
+                                    <th>Market</th>
+                                    <th title="Key Account Manager">KAM</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRvsRFClient">
+                                    <td>{{a.ClientName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td>{{a.Market}}</td>
+                                    <td>{{a.Owner}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="" ng-if="IsSalePerson=='False'">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">NR VS REFUNDABLE SUPPLIER</h4>
+                    <h6 style="color: #b50000;" id="NRVsRFSupplierDate"></h6>
+                    <h6 style="color: #b50000;" id="NRVsRFSupplierMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/NRVsRefundableSupplier" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="NRvsRFSuppPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="NRvsRFSuppReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Supplier Name</th>
+                                    <th>Type</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRvsRFSupp">
+                                    <td>{{a.SupplierName}}</td>
+                                    <td>{{a.Type}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">NR VS REFUNDABLE HOTEL</h4>
+                    <h6 style="color: #b50000;" id="NRVsRFHotelDate"></h6>
+                    <h6 style="color: #b50000;" id="NRVsRFHotelMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/NRVsRefundableHotel" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="NRRFHotelPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="NRRFHotelReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRvsRFHotel">
+                                    <td>{{a.HotelName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">NR VS REFUNDABLE DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="NRVsRFDestDate"></h6>
+                    <h6 style="color: #b50000;" id="NRVsRFDestMonth"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/NRVsRefundableDestination" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="NRVsRFDestPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="NRVsRFDestReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRVsRFDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES CLIENTS GROWTH VS LW - BOOKINGS</h4>
+                    <h6 style="color: #b50000;" id="ClientGrowthLwBookingsDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/ClientsGrowthVsLWBookings" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="ClientGrowthLwBookingsPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="ClientGrowthLwBookingsRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Client Name</th>
+                                    <th>Type</th>
+                                     <th>Market</th>
+                                    <th>Owner</th>
+                                    <th style="text-align:right;">CW</th>
+                                    <th style="text-align:right;">LW2</th>
+                                    <th style="text-align:right;">LW3</th>
+                                    <th style="text-align:right;">LW4</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRvsRFHotel">
+                                    <td>{{a.HotelName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES CLIENTS GROWTH VS LW - DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="ClientGrowthLWDestDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/ClientsGrowthVsLWDestination" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="ClientGrowthLWDestPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="ClientGrowthLWDestRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRVsRFDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES CLIENTS GROWTH VS LW - RN</h4>
+                    <h6 style="color: #b50000;" id="ClientGrowthLWRNDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/ClientsGrowthVsLWRN" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="ClientGrowthLWRNPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="ClientGrowthLWRNRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRVsRFDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES BOOKING ERROR VS LW - CLIENTS</h4>
+                    <h6 style="color: #b50000;" id="BookingErrLWClientsDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/BookingErrLWClients" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="BookingErrLWClientsPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="BookingErrLWClientsRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Hotel Name</th>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRvsRFHotel">
+                                    <td>{{a.HotelName}}</td>
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES BOOKING ERROR VS LW - SUPPLIER</h4>
+                    <h6 style="color: #b50000;" id="BookingErrLWSuppDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/BookingErrLWSupp" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="BookingErrLWSuppPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="BookingErrLWSuppRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRVsRFDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="">
+
+            <div class="panel Hmpanel-table">
+                <div class="Hmpanel-heading">
+                    <h4 class="Hmpanel-title">SALES BOOKING ERROR VS LW - DESTINATION</h4>
+                    <h6 style="color: #b50000;" id="BookingErrLWDestDate"></h6>
+                    <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                    <a target="_blank" href="~/Dashboard_V1/BookingErrLWDest" class="HmView-more2" title="Click to view more">View More</a>
+                </div>
+                <div class="padd15" ng-show="AgNoRecords">
+                    <sapn>No Records Found</sapn>
+                </div>
+                <div id="BookingErrLWDestPopup">
+                    <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                </div>
+
+                <div class="table-responsive" style="padding: 17px;">
+                    <table id="BookingErrLWDestRpt" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth">
+                        @*<thead class="main-head hidden-xs">
+                                <tr>
+                                    <th>Destination</th>
+                                    <th style="text-align:right;">BKG</th>
+                                    <th style="text-align:right;">NR %</th>
+                                    <th style="text-align:right;">RF %</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="hsrr-tbody-main">
+                                <tr ng-repeat="a in MainResultlistNRVsRFDest">
+                                    <td>{{a.Dest}}</td>
+                                    <td style="text-align:right;">{{a.T_bookings}}</td>
+                                    <td style="text-align:right;">{{a.NR}}</td>
+                                    <td style="text-align:right;">{{a.RF}}</td>
+                                </tr>
+                            </tbody>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

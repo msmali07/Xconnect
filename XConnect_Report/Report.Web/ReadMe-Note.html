@@ -1,0 +1,1315 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="Css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="libs/jquery-1.10.2.min.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    
+  
+</head>
+
+<body>
+    <form id="form1" style="line-height: 2;font-family: 'Roboto', sans-serif !important;font-size:14px;">
+
+
+        <div class="col-md-12" style="text-align: center;padding-top:  10px;">
+
+            <label style="font-size:20px"><b><u>Reporting Tool</u></b></label>
+
+        </div>
+
+        <div style="padding:25px;">
+            <div class="pagewidth">
+
+
+                <p>
+                    This is common Reporting tool Project for All clients.Reports are common for all clients,some reports are client based( for particular client as per req.)
+                </p>
+                <div id="PageIndex" class="pageindex">
+                    <p>
+                        1. <a href="#Login">Connectivity from Parent client to Reporting Tool (Login)</a>
+                    </p>
+
+                    <p>
+                        2. <a href="#Css">Style and Images</a>
+                    </p>
+                    <p>
+                        3. <a href="#Homepage">Home Page-DashBorad</a>
+                    </p>
+                    <p>
+                        4. <a href="#Homepagedetails">DashBorad Details Report</a>
+                    </p>
+                    <p>
+                        5. <a href="#Common">Common Functionality in Report</a>
+                    </p>
+                    <p>
+                        6. <a href="#Steps">Common Steps for Create Simple Report</a>
+                    </p>
+                    <p>
+                        7. <a href="#Reports">Reports</a>
+                    </p>
+
+                </div>
+                <br />
+                <br />
+
+
+                <div id="Login">
+                    <p align="left" class="heading">
+                        <b>1. Connectivity from Parent client to Reporting Tool (Login):</b><br />
+                        <div style="padding-left:40px;">
+                            For connecting the report tool for particular client then,<br />
+                            1. Create the Report Project URL and that URL details add in 'ServiceCredentials.json' file  in Client Project.<br />
+                            eg. <br />
+                            {
+                            "default": "http://pcname/RptURL/",<br />
+                            "RedirectHome": "http://pcname/RptURL/Login/",<br />
+                            "LogOut": "http://pcname/RptURL/Home/",<br />
+                            "ParentURL": "http://pcname/ParentClientURL/",<br />
+                            "_Type": "Report_Local"<br />
+                            }<br />
+                            2. First add Report Tag on Header file in Client project.<br />
+                            3. Then After Click to Report tag,in second window open the Reporting Tool with Login.(On Click all logindetails pass from Client to Reporting tool
+                            by Url query string data in encrypted form) <br />
+                            4.There are Two Types of Login in Reporting Tool.<br />
+                            <u>a) Normal Login</u> - As normal same as client login to reporting login.<br />
+                            <u>b) Cross Login</u> - <br />
+                            In this we are Cross login to Reporting tool,i.e. In Client Project one company login and for Reporting Tool differnt comapny login.
+                            for that in Repoting tool Project have one Cross Login.xml file in App_Data folder.if we want to Cross login for any company then Please Add
+                            Cross login Company details to that xml file with Company code.<br />
+                            so when connecting Client to the Reporting tool on basis of that cross login details user can
+                            login sucessfully for that company.but if want Cross login functionality then only add cross login details to that file otherwise not need to add any details
+                            in crosslogin.xml file.<br /><br />
+
+                            <b><u>Database related Setting:</u></b><br />
+                            1.For Xconnect client first have to Update tblCompany table -> colunm cReports for which reports open for that Client.(give Roles which Reports Open for that Client).Please chcek the report roles in tblReportMaster.<br />
+                            2.Then in tblUserMaster for Hq user set default Report Roles in colunm cReportRoles,so on HQ Login on Client side show the Report icon for redirection.<br />
+                            3.So After Login to Client-> from Members Page you have option to set Reports role to All members.(In Member Page Reports Roles are display by Client Reports Roles and members Level wise.)<br />
+                            4.Basically in Report Protal have two levels,<br />
+                            first-Client/Company Level Reports.(which assign in tblcompany->cReports)<br />
+                            second-Member wise Reports.(which assign in tblUserMaster->cReportRoles)<br />
+                            5.bIsComplusory is means that report show by default after redirection and its complusory to show without rolelevel.<br />
+                            level 4 - 	ist show for all member.i.e all membertype<br />
+                            level 3-	its show upto Ws<br />
+                            level 2-	its show up to Branch<br />
+                            level 1 - 	its show up to HQ <br />
+
+                            Here show some example of report roles(tblReportMaster):<br />
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>nId  </th>
+                                        <th>cReport  </th>
+                                        <th>nReportLevel  </th>
+                                        <th>nGrop  </th>
+                                        <th>bIsComplusory</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Account Report</td>
+                                        <td>4</td>
+                                        <td></td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>User Sales Report</td>
+                                        <td>2</td>
+                                        <td></td>
+                                        <td>0</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </p>
+                </div>
+
+
+                <div id="Css">
+                    <p align="left" class="heading">
+                        <b>2. Style and Images:</b><br />
+                        <div style="padding-left:40px;">
+
+                            1. Css file for Reporting Tool is client baseds,So for style css Add one Css file in Css folder with Companycode and AppURL name for styling. <br />
+                            e.g.style-Companycode-AppURL.css.<br />
+
+                            2. For Company Logo dnt need any image to saved,Company logo is Login based and Show by Client Project Path.<br />
+                            3. For  Waiting popup img have to Add company waiting img in Images folder.
+
+                        </div>
+                    </p>
+                </div>
+
+
+                <div id="Homepage">
+                    <p class="heading">
+                        <b>3. Home Page-DashBorad:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+                        Home Page includes the following Dashborad Report tables by BookDate or Chcekin Date wise and By All Branch or for One Branch and By Value or Count.<br />
+                        All Dashborad show only Top 5 Records. on <u>View More</u> click,Redirects to  Dashborad Details Reports.
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>DashBorad Name  </th>
+                                    <th>Procedure</th>
+                                    <th>Show for</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Booking Status Count</td>
+                                    <td>Usp_Rpt_GetHomeDetails_DS</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Servicewise Booking List</td>
+                                    <td>Usp_Rpt_GetServiceBookingListDS_V2</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Branch Productivity</td>
+                                    <td>Usp_Rpt_GetTopBranchListDS</td>
+                                    <td>HQ</td>
+                                </tr>
+                                <tr>
+                                    <td>Agent Productivity</td>
+                                    <td>Usp_Rpt_GetTopAgencyListDS</td>
+                                    <td>HQ,BR,WS Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Top Sellout Suppliers</td>
+                                    <td>Usp_Rpt_GetTopSupplierListDS</td>
+                                    <td>HQ Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Failed Bookings</td>
+                                    <td>Usp_Rpt_GetTopSuppFaliedBookingListDS</td>
+                                    <td>HQ Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Agent Activity</td>
+                                    <td>Usp_Rpt_GetTopAgActiveListDS</td>
+                                    <td>HQ,BR Login</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Top Searched City & Bookings(Hotel)</td>
+                                    <td>Usp_Rpt_GetTopSearchCityBookingListDS</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Top Searched Agents & Bookings(Hotel)</td>
+                                    <td>Usp_Rpt_GetTopAgencySearchCityBookingListDS</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>Yearly-Month Graph</td>
+                                    <td>Usp_Rpt_GetBookingByYearly</td>
+                                    <td>All Login</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div id="Homepagedetails">
+                    <p class="heading">
+                        <b>4. DashBorad Details Report:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+                        After View More click it redirects to Dashborad Detail Report Page.
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>DashBorad Details Report Name  </th>
+                                    <th>Procedure</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Booking Status Report</td>
+                                    <td>Usp_Rpt_BookStatusReport</td>
+                                    <td>Report shows the some Main details about booking as per Booking status and serching criteria.</td>
+                                </tr>
+                                <tr>
+                                    <td>Servicewise Booking List</td>
+                                    <td>Usp_Rpt_ServiceBookingReport</td>
+                                    <td>Report shows the service wise booking count as per serching criteria.</td>
+                                </tr>
+                                <tr>
+                                    <td>Branch Productivity</td>
+                                    <td>Usp_Rpt_BranchBookingReport</td>
+                                    <td>
+                                        Report shows the booking count or Booking total sell in selected currency for Bookings as per serching criteria by Branch Only.<br />
+                                        Report Includes only Following  Bookstatus - ('KK','RR','RN') OR (cBookstatus = 'XX' AND XXcharge.nSellAmount > 0)<br />
+                                        Total Sell calculated by converting the AgPay(Sell Amt by minus Ag+ Ws markup) Sellamt in Selected currency Amt by SellCurrency to Selected Currency ROE.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Agent Productivity</td>
+                                    <td>Usp_Rpt_AgentBookingReport</td>
+                                    <td>
+                                        Report shows the booking count or Booking total sell in selected currency for Bookings as per serching criteria by Agency.<br />
+                                        Report Includes only Following  Bookstatus - ('KK','RR','RN') OR (cBookstatus = 'XX' AND XXcharge.nSellAmount > 0)<br />
+                                        Total Sell calculated by converting the AgPay(Sell Amt by minus Ag+ Ws markup) Sellamt in Selected currency Amt by SellCurrency to Selected Currency ROE.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Top Sellout Suppliers</td>
+                                    <td>Usp_Rpt_SupplierBookingReport_V2</td>
+                                    <td>
+                                        Report shows the booking count or Booking total sell in selected currency for Bookings as per serching criteria by Supplier.<br />
+                                        Report Includes only Following  Bookstatus - ('KK','RR','RN','RQ') OR (cBookstatus = 'XX' AND XXcharge.nSellAmount > 0)<br />
+                                        Total Sell calculated by converting the NetAmt in Selected currency Amt by SellCurrency to Selected Currency ROE.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Failed Bookings</td>
+                                    <td>Usp_Rpt_SuppFaliedBookingReport</td>
+                                    <td>
+                                        Report shows the  falied booking count as per serching criteria by Supplier.
+                                        Report Includes only Following  Bookstatus - ('KK','RN','RR')
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Agency Activity</td>
+                                    <td>Usp_Rpt_AgencyActivityReport</td>
+                                    <td>
+                                        Report shows the  Agency wise bookings count as per Status/
+                                        Report Includes only Following  Bookstatus -Bookings- All status,Reconfirmed - only RR,Cancelled- XX with charge count
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Top Searched City & Bookings(Hotel)</td>
+                                    <td>Usp_Rpt_SearchCityBookingReport,Usp_Rpt_SearchCityBookingReportGetSerachCount</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Top Searched Agents & Bookings(Hotel)</td>
+                                    <td>Usp_Rpt_SearchAgentBookingReport,Usp_Rpt_SearchAgentBookingReportGetSerachCount</td>
+                                    <td></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div id="Common">
+                    <p align="left" class="heading">
+                        <b>5. Common Functionality in Report:</b><br />
+                        <div style="padding-left:40px;">
+
+                            All Reports have some Common Adv. Functionality which functions is commonly created in <u>CommonUtility.js</u>,so for that Functions only call Particular functions in CommoanUtility.js . <br />
+
+                            <b>Filtering:</b> <br />
+                            &nbsp;&nbsp;For Colunm. Filtering commonly have popup in <u>FilterPopupPartial.cshtml</u> and for js functionlity used follwing function from CommonUtility.js. <br />
+                            <u> Text and Common Filter- </u> <br />
+                            a) Set_FilterList(FilterDOList, FilterTypeActive, MainResultlist, ReportFilter)<br />
+                            b) Apply_Filter(FilterDOList, FilterTypeActive, MainResultlist)<br />
+                            <u> Number  Filter- </u> <br />
+                            a) SetRangeList()<br />
+                            b) Set_NumberRangeFilterList(FilterDOList, FilterTypeActive, MainResultlist, ReportFilter)<br />
+                            c) Apply_NumberRangeFilterValidation()<br />
+                            d) Apply_NumberRangeFilter(FilterDOList, FilterTypeActive, MainResultlist)<br />
+                            <br />
+                            &nbsp;&nbsp; &nbsp;&nbsp; For Report Col. Filtering functionality used ReportFilterDO()(which is defind is Model.js),so for new Report if add new col. filter tehn add that parameter in ReportFilterDO function and please give short name for all Columns.<br />
+                            And col. name is same as Web DO and ReportFilterDO.If parameter have already in ReportFilterDO  then plesae used that parameter for col not create duplicate parameter in ReportFilterDO.<br />
+                            e.g. for BranchName - BRname,ServiceName - Sname,Supplier- SuppName.
+
+
+                            <br /><br />
+                            <b>Sorting:</b> <br />
+                            &nbsp;&nbsp;For Colunm. Sorting commonly have popup in <u>FilterPopupPartial.cshtml</u> and only in Report js have to Create arraylist By report Colunm  names and for js functionlity used follwing function from CommonUtility.js. <br />
+                            a) Apply_Sorting(table, SortDetails)<br />
+                            b) Clear_Sorting(table)<br />
+                            c) AddSorting_MoreLevel(currentsrno, SortDetails)<br />
+                            d) DeleteSorting_Level(SrNo, SortDetails)<br />
+                            e) TopData_With_Sort(MainResultlistAfterFilter, SortDetails)<br />
+                            f) sortByKeyAsc(array, key)<br />
+                            g) sortByKeyDesc(array, key)<br />
+
+                            <br /><br />
+                            <b>Colunm Visibility :</b> <br />
+                            &nbsp;&nbsp;For Colunm. Hide commonly have popup in <u>FilterPopupPartial.cshtml</u> and only in Report js have to Create arraylist By report Colunm  names and for js functionlity used follwing function from CommonUtility.js. <br />
+                            a) Hide_Columns(table)<br />
+
+                            <br /><br />
+                            <b>Post Booking Section :</b> <br />
+                            &nbsp;&nbsp;For Report Seraching Post Booking All oprations and Design div is commoanly used by rendering PostBookingPartial.cshtml parital view for design and PostBooking.js for functionality.<br />
+                            e.g.  Used this function for impoerting Postbooking in our Report js.this is call in Init() function.<br />
+                            $rootScope.$on("CallPostBooking", function (event) {<br />
+                            setPostMemberDetails(event);<br />
+                            });<br />
+                            <br />
+
+
+                        </div>
+                    </p>
+                </div>
+
+                <div id="Steps">
+                    <p align="left" class="heading">
+                        <b>6. Common Steps for Create Simple Report:</b><br />
+                        <div style="padding-left:40px;">
+
+                            For Create new Report Please follw the common Steps:<br />
+                            1) First Create the cshtml and Js in Views and Sripts Folder with Same Nam And Add cshtml in that  Report type Controller and All DO also in same class file.<br />
+                            2) Then Create the Same DO in Model.js which is create in Partiular DO in Report.DO class file.<br />
+                            In Model.js have  functions for create DO for Angular Functionlity and binding.<br />
+                            e.g.function AccountReportDO() {<br />
+                            AccountReportDO = {<br />
+                            "ArrivalFrom": "",<br />
+                            "ArrivalTo": "",<br />
+                            "MemberId": 0,<br />
+                            "LoginMemberId": 0,<br />
+                            "LoginUserId": 0,<br />
+                            "BookingdateWise":false,<br />
+                            }<br />
+                            return AccountReportDO;<br />
+                            }<br />
+                            3) Then in Created Report Js first declare the common used DO and other variables defind in NgInit() function.<br />
+                            e.g.    $scope.AccountReport = AccountReportDO();(this is Account  Report DO)<br />
+                            $scope.ReportFilter = ReportFilterDO();(This is complusory declred in js for Reporting Filtering) <br />
+                            $scope.PostBooking = PostBookingDO(); (This is complusory declred in js for Reporting Filtering) <br />
+                            4) For Post Booking section also have common Partial View and Js (PostBooking.js And PostBookingPartial.cshtml)  in Report View Only Call Such Partial Viwes for Rending PostBooking.<br />
+                            And for PostBooking function have to call this function  <br />
+                            $rootScope.$on("CallPostBooking", function (event) {<br />
+                            setPostMemberDetails(event);<br />
+                            });<br /> In this function  have All Postbooking functionlity related to DB Get Data, as load branch,get Aglist by Branch selected etc.
+                            e.g. @{<br />
+                            Html.RenderPartial("PostBookingPartial"); <br />
+                            }           <br />
+                            for Filter and other Popup also rendering by this way(this is at last ).<br />
+                            e.g. @{<br />
+                            Html.RenderPartial("FilterPopupPartial");<br />
+                            }<br />
+                            5) And Futher Controller call from get data  is common as other project and Data is store in one List ($scope.MainResultlist- this is main Data List,which is not changed) and also another List($scope.MainResultlistAfterFilter- this is for Filtering Data List which is changed as per Oprations Perform).<br />
+                            6) Now Report Table is display by <b>Datatable.net</b>,which is  a plug-in for the jQuery Javascript library.<br />
+                            7) for Datatable.net lib in cshtml page commonly loaded follwing js:<br />
+                            "~/libs/DataTables/jquery.dataTables.js"<br />
+                            "~/libs/DataTables/jquery.dataTables.min.js"<br />
+                            "~/libs/DataTables/dataTables.rowGroup.min.js"<br />
+
+                            "~/libs/DataTables/dataTables.buttons.min.js"<br />
+                            "~/libs/DataTables/buttons.flash.min.js"<br />
+                            "~/libs/DataTables/buttons.html5.min.js"<br />
+                            "~/libs/DataTables/buttons.print.min.js"<br />
+                            "~/libs/jszip.min.js"<br />
+                            "~/libs/pdfmake.js"<br />
+                            "~/libs/vfs_fonts.js"<br />
+                            "~/Css/dataTables.css"<br />
+
+                            8) For Set report table have SetDataTable() function - for binding all table columns settting,all table oprations like Ordering,Grouping,Exports,Colunms align styles,formatting for text all oprations are in this function,<br />
+
+                            <br />
+                            <u>REF:</u>
+                            For First time Create a simple Report,Please Ref.the AccountReport.cshtml and accountreport2.js<br />
+                            <br />
+
+
+
+
+                        </div>
+
+
+
+
+                </div>
+
+
+                <div id="Reports">
+                    <p class="heading">
+                        <b>7. Reports:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+                        The Follwing are the report list:
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ReportRole Id</th>
+                                    <th>Report Name</th>
+                                    <th>Group(as Main Menu)</th>
+                                    <th>For Company Code</th>
+                                    <th>Show By Login</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td> <a href="#Account">Account Report</a></td>
+                                    <td>Booking</td>
+                                    <td>XconnectAll</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td> <a href="#profit">Profit & Loss Report</a></td>
+                                    <td></td>
+                                    <td>1;</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td> <a href="#procutivity">Hotel Prodcutivity Report</a></td>
+                                    <td>Productivity</td>
+                                    <td>1;</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td> <a href="#NetStatement">Net Statement Report</a></td>
+                                    <td>Booking</td>
+                                    <td>XconnectAll</td>
+                                    <td>All Login</td>
+                                </tr>
+
+                                <tr>
+                                    <td>3</td>
+                                    <td><a href="#DailySales">Daily Sales  Report</a></td>
+                                    <td></td>
+                                    <td>XconnectAll</td>
+                                    <td>All Login</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a href="#UserSales">User Sales   Report</a></td>
+                                    <td></td>
+                                    <td>4;</td>
+                                    <td>Hq,Br Login</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td><a href="#CorporateAndCardUse">Corporate And CardUse Report</a></td>
+                                    <td></td>
+                                    <td>4;</td>
+                                    <td>HQ,Br Login</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td><a href="#Contract">Contract Report</a></td>
+                                    <td></td>
+                                    <td>XconnectAll</td>
+                                    <td>HQ</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td><a href="#AgencyPer">Agency Performance Report</a></td>
+                                    <td></td>
+                                    <td>XconnectAll</td>
+                                    <td>HQ,</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td><a href="#OPLReport">Operational Issue Report </a></td>
+                                    <td></td>
+                                    <td>1;</td>
+                                    <td>Hq,Br Login</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td><a href="#AgencyUser">Agency User Report </a></td>
+                                    <td></td>
+                                    <td>XconnectAll</td>
+                                    <td>HQ,</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td><a href="#CCProductivityRpt">Country City Productivity Report </a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>HQ</td>
+                                </tr>
+
+                                <tr>
+                                    <td>13</td>
+                                    <td><a href="#TransactionRpt">Transaction Report </a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>Hq,Br Login</td>
+                                </tr>
+
+                                <tr>
+                                    <td>9</td>
+                                    <td><a href="#MemberCDRpt">Member Credit Details Report </a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>Hq,Br Login</td>
+                                </tr>
+
+                                <tr>
+                                    <td>14</td>
+                                    <td><a href="#HmRpt">Hotel Mize Report </a></td>
+                                    <td></td>
+                                    <td>1;</td>
+                                    <td>HQ</td>
+                                </tr>
+
+                                <tr>
+                                    <td>17</td>
+                                    <td><a href="#MFRpt">Marketing Fee Report </a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>HQ</td>
+                                </tr>
+
+                                <tr>
+                                    <td>18</td>
+                                    <td><a href="#SPRpt">Sales Person Productivity Report</a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>HQ</td>
+                                </tr>
+
+                                <tr>
+                                    <td>19</td>
+                                    <td><a href="#HQRpt">HQ User Productivity Report</a></td>
+                                    <td></td>
+                                    <td>XconnectALL</td>
+                                    <td>HQ</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <br /><br />
+                </div>
+
+                <div id="Account">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Account Report:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>usp_Rpt_AccountReport_V2</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="profit">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Profit & Loss Report:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_ProfitLossReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Number Filtering<br />
+                                        Sort with Top show Record<br />
+                                        Top Show Record<br />
+                                        Grouping<br />
+                                        Summary<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="procutivity">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Hotel Prodcutivity Report:</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>
+                                        Usp_Rpt_GetHotelProductivityReport<br />
+                                        Usp_Rpt_GetHotelProductivityReportDetail_Citywise<br />
+                                        Usp_Rpt_GetHotelProductivityReportDetail_PaxWise<br />
+                                    </td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Sort with Top show Record<br />
+                                        Top Show Record<br />
+                                        Grouping<br />
+                                        Total Show<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                        Report detail:
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>HotelWise</th>
+                                    <th>CityWise</th>
+                                    <th>PaxWise</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>
+                                        Booking Country<br />
+                                        Booking City<br />
+                                        Hotel Name <br />
+                                        Booking No Of RoomNts <br />( i.e noofrooms * nights,<br /> e.g - one booking have total 3 nts and 2 rooms then No Of RoomNts= 2*3 = 6)<br />
+                                        Only Book Status = RR
+                                    </td>
+                                    <td>
+                                        Booking Country<br />
+                                        Booking City<br />
+                                        Booking No Of RoomNts <br /> ( i.e noofrooms * nights,<br /> e.g - one booking have total 3 nts and 2 rooms then No Of RoomNts= 2*3 = 6)<br />
+                                        Only Book Status = RR
+                                    </td>
+                                    <td>
+                                        Booking Country<br />
+                                        Booking City<br />
+                                        Hotel Name <br />
+                                        No Of Adults<br />
+                                        No Of Childs<br />
+                                        Total Pax<br />
+                                        Only Book Status = RR
+                                    </td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="NetStatement">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Net Statement Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_NetStatementReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div id="DailySales">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Daily Sales Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_DailySalesReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="UserSales">
+                    <p class="heading" style="font-size:16px;">
+                        <b>	User Sales Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_UserSalesReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="CorporateAndCardUse">
+                    <p class="heading" style="font-size:16px;">
+                        <b>	Corporate And CardUse Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_GetCorporateCardUseReport,Usp_Rpt_getCorporateandCardUse</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="Contract">
+                    <p class="heading" style="font-size:16px;">
+                        <b>	Contract Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_ContractReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Branch/All Agent/One Member</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div id="AgencyPer">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Agency Performance Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_AgencyPerformanceReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Agent</td>
+                                </tr>
+
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="OPLReport">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Operational Issue Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Funactionality</th>
+                                    <th>Seraching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_OperationalIssueReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Colunm Visibility<br />
+                                        Custom Sort<br />
+                                        Colunm Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Supplier</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="AgencyUser">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Agency User Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_AgencyUserReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Agent</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="CCProductivityRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Country City Productivity Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_CCProductivityReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Agent</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="TransactionRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Transaction Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_TransactionReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Agent</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div id="MemberCDRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Member Credit Details Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_MemberCreditDetailsReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>All Agent</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="HmRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Hotel Mize Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_HotelMizeBookingsReport</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>HQ</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="MFRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Marketing Fee Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>usp_Rpt_MarketingFee</td>
+                                    <td>
+                                        Export to Excel<br />
+                                        Copy to Excel<br />
+                                        Column Visibility<br />
+                                        Custom Sort<br />
+                                        Column Sort<br />
+                                        Filtering<br />
+                                        Grouping<br />
+                                    </td>
+                                    <td>HQ</td>
+                                </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div id="SPRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>Sales Person Productivity Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_SalesProductivityReport_2</td>
+                                    <td>
+                                    </td>
+                                    <td>HQ</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="HQRpt">
+                    <p class="heading" style="font-size:16px;">
+                        <b>HQ User Productivity Report :</b><br />
+                    </p>
+                    <div style="padding-left:40px;">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Functionality</th>
+                                    <th>Searching level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td>Usp_Rpt_HQProductivityReport</td>
+                                    <td>
+                                    </td>
+                                    <td>HQ</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+            </div>
+                    <div class="gototop" >                      
+                       
+                        <a href="#" id="return-to-top" ><i class="fa fa-angle-double-up"></i> Go To Top</a>
+                    </div>
+                </div>
+</form>
+</body>
+</html>

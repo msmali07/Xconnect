@@ -1,0 +1,201 @@
+﻿
+@using Report.BLL;
+@using Report.DO;
+@using Report.Web;
+@using ReportViewerForMvc
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TransactionReport</title>
+
+
+    <script src="~/libs/DataTables/jquery.dataTables.js"></script>
+    <script src="~/libs/DataTables/dataTables.rowGroup.min.js"></script>
+
+
+
+    <script src="~/libs/DataTables/dataTables.buttons.min.js"></script>
+    <script src="~/libs/DataTables/buttons.flash.min.js"></script>
+    <script src="~/libs/DataTables/buttons.html5.min.js"></script>
+    <script src="~/libs/DataTables/buttons.print.min.js"></script>
+    <script src="~/libs/jszip.min.js"></script>
+
+    <script src="~/libs/vfs_fonts.js"></script>
+
+
+    <script src="~/Scripts/TransactionReport.js?v2"></script>
+    <link href="~/Css/dataTables.css" rel="stylesheet" />
+
+
+    <script src="~/libs/DataTables/dataTables.responsive.js"></script>
+
+
+
+</head>
+
+<body ng-app="TransactionReportapp" ng-controller="TransactionReportCntr" id="MainWrap" style="overflow-x: auto;">
+
+    <input type="hidden" id="hdnParentmemberid" value="" />
+    <input type="hidden" id="hdnParenttypeid" value="" />
+
+
+    <div id="MainBody" runat="server" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+        <div id="HeaderSearchdiv" class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-12 col-xs-12 container mrg-top40">
+            <div class="col-lg-12 col-md-12  col-sm-12 col-xs-12 mtb10 hdbg bdr1 bdr-btm0 padd-btm5 padd-top5" id="divhdeading">
+                <div class="col-lg-8 col-md-8  col-sm-8 col-xs-12">
+                    <span style="font-size: 17px;font-weight: 600;">Transaction Report</span><br />
+
+                    <div id="RptHeaderDetails" style="display:none;">
+                        <b>From: </b><span id="spDateFrom">{{TransactionReport.DateFrom}}</span>&nbsp;
+                        <b>To: </b><span id="spDateTo">{{TransactionReport.DateTo}}</span>&nbsp;
+                        <span>
+                            <span ng-if="ReportFilter.GroupBy!=''"><b>View By:</b> </span> <span>{{GroupingName}} </span>
+                        </span>
+
+                        <label ng-if="LoginMemberType != '4'"><b>Showing Report For :</b> <span id="spBrchName" style="font-weight: normal !important">{{PostBooking.ReportCompanyName}}</span></label>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4  col-sm-4 col-xs-12">
+                    <span ng-hide="ModifySearch" class="pull-right mrg-top05" id="modifyserach">
+                        <a id="btnModifySearch" ng-click="ShowModifyClick()" class="btn search hover-btn" data-toggle="collapse"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> &nbsp;Modify search </a>
+                    </span>
+                </div>
+            </div>
+
+            <form class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg2 collapse  bdr1 bdr-top0" id="demo" style="box-shadow:none !important;">               
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-btm10 nopadding">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <select class="select--hoshi" id="ddl_CustomDateRange" (input)="ReportFilter.CustomDateOption=$event.target.value">
+                            <option value="">Custom Date Range</option>
+
+
+                            <option ng-selected="ReportFilter.CustomDateOption == dd.Values" value="{{dd.Values}}" ng-repeat="dd in DateRangeList">
+                                {{dd.Name}}
+                            </option>
+                        </select>
+
+
+
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="TransactionReport.DateFrom" id="txtFromDate">
+                        <span class="floating-label" id="spArrivalFromDate"> From Date <span class="red-color">*</span></span>
+
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mrg-top20">
+
+                        <input class="floating-inpt date-cal " type="text" autocomplete="off" required="" ng-model="TransactionReport.DateTo" id="txtToDate">
+                        <span class="floating-label" id="spArrivalToDate"> To Date <span class="red-color">*</span></span>
+
+                    </div>
+
+                    <div ng-controller="PostBookingController" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+                        <input type="hidden" id="hdnIsGetMemberdetails" value="" />
+                        <input type="hidden" id="hdnMemberdetails" value="" />
+                        @{
+                            Html.RenderPartial("PostBookingPartial");
+                        }
+
+                    </div>
+                </div>
+
+            
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20 mrg-btm10 nopadding">
+                    <div class="col-md-12 text-left mtb10">
+                        <div class="upt-prof-btn">
+                            <a class="btn hover-btn nomargin" ng-click="SearchReportClick()" data-toggle="collapse">Search</a>
+                            <a id="btnclose" class="btn search hover-btn" ng-click="ShowModifyBtn();" data-toggle="collapse"> &nbsp;Close </a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20" style="display:none;" id="RptDetails">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+
+
+                <div class="table-responsive">
+                    <table id="TransactionReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs display nowrap " style="font-size:13px;padding: 5px 5px !important;">
+                        <thead class="main-head hidden-xs" id="theaddiv">
+                            <tr>
+                                @*//its complusaory for give <a> tag with col id for all th bcz for top show col sorting this id is must*@
+
+                                <th>Agency Name <a class="filter-icon" id="AgName" onclick="CalltoFilterPopup('AgName')"><i class="fa fa-filter" aria-hidden="true"></i></a></th>
+                                <th>Transact_Id</th>
+                                <th>Currency</th>
+                                <th>Amount</th>
+                                <th>Remarks</th>
+                                <th>Payment Date</th>
+                                <th>Book Ref / Pos</th>
+                                <th>Status <a class="filter-icon" id="Status" onclick="CalltoFilterPopup('Status')"><i class="fa fa-filter" aria-hidden="true"></i></a></th>
+                                <th>Service Name </th>
+
+
+                            </tr>
+
+                        </thead>
+
+
+
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+       
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Noresultdiv" style="display:none;"> <h4 class="text-center bold">No Results Found!</h4></div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" id="Errordiv" style="display:none;"> <h4 class="text-center bold">There is Some Error for Processing Report!</h4></div>
+        @{
+            Html.RenderPartial("FilterPopupPartial");
+        }
+
+
+
+
+    </div>
+
+
+    <script type="text/javascript">
+
+
+            $("#txtFromDate").change(function () {
+                $("#ddl_CustomDateRange")[0].selectedIndex = 0;
+            });
+
+            function changeMe(sel, id) {
+                $("#" + id).show();
+                sel.style.color = "#000";
+
+            }
+
+
+
+    </script>
+
+
+</body>
+</html>
+
+
+
+
+

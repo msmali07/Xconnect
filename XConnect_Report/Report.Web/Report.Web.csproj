@@ -1,0 +1,718 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F3D4E37-C1E6-4B6C-9E10-F7448CC421A7}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Report.Web</RootNamespace>
+    <AssemblyName>Report.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Development\Report.Web\3rd DLL\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfMetamorphosis, Version=6.8.7.12, Culture=neutral, PublicKeyToken=f77041e5caa5fc2f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd DLL\PdfMetamorphosis.dll</HintPath>
+    </Reference>
+    <Reference Include="ReportViewerForMvc, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ReportViewerForMvc14.140.1000.523\lib\net45\ReportViewerForMvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionFilter\SessionTimeoutAttribute.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
+    <Compile Include="Controllers\BookingController.cs" />
+    <Compile Include="Controllers\CommonDataController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\Dashboard_V1Controller.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProductionController.cs" />
+    <Compile Include="Filters\GzipCompressionAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="3rd DLL\Microsoft.ReportViewer.WebForms.dll" />
+    <Content Include="3rd DLL\Newtonsoft.Json.dll" />
+    <Content Include="3rd DLL\PdfMetamorphosis.dll" />
+    <Content Include="App_Data\CrossLogin.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Data\MailSettings.xml" />
+    <Content Include="Css\angular-material-v1.1.3.css" />
+    <Content Include="Css\bootstrap-multiselect.css" />
+    <Content Include="Css\bootstrap-slider.css" />
+    <Content Include="Css\bootstrap.css" />
+    <Content Include="Css\bootstrap.min.css" />
+    <Content Include="Css\dataTables.css" />
+    <Content Include="Css\font-awesome.min.css" />
+    <Content Include="Css\jquery-ui-1.12.1.css" />
+    <Content Include="Css\menusample.css" />
+    <Content Include="Css\rowGroup.dataTables.min.css" />
+    <Content Include="Css\style-1-72.css" />
+    <Content Include="Css\style-1-73.css" />
+    <Content Include="Css\style-1-71.css" />
+    <Content Include="Css\style-1-70.css" />
+    <Content Include="Css\style-1-69.css" />
+    <Content Include="Css\style-1-68.css" />
+    <Content Include="Css\style-1-66.css" />
+    <Content Include="Css\style-1-65.css" />
+    <Content Include="Css\style-1-67.css" />
+    <Content Include="Css\style-1-63.css" />
+    <Content Include="Css\style-1-64.css" />
+    <Content Include="Css\style-1-50.css" />
+    <Content Include="Css\style-1-27.css" />
+    <Content Include="Css\style-1-39.css" />
+    <Content Include="Css\style-1-40.css" />
+    <Content Include="Css\style-1-1.css" />
+    <Content Include="Css\style-27-271.css" />
+    <Content Include="Css\style-36-1.css" />
+    <Content Include="Css\report.css" />
+    <Content Include="Css\style-34-1.css" />
+    <Content Include="Css\style-31-311.css" />
+    <Content Include="Css\style-47-474.css" />
+    <Content Include="Css\style-47-473.css" />
+    <Content Include="Css\style-47-472.css" />
+    <Content Include="Css\style-48-481.css" />
+    <Content Include="Css\style-63-631.css" />
+    <Content Include="Css\style-64-6423.css" />
+    <Content Include="Css\style-64-642.css" />
+    <Content Include="Css\style-64-641.css" />
+    <Content Include="Css\style-66-661.css" />
+    <Content Include="Css\style-51-513.css" />
+    <Content Include="Css\style-58-581.css" />
+    <Content Include="Css\style-57-571.css" />
+    <Content Include="Css\style-51-511.css" />
+    <Content Include="Css\style-54-541.css" />
+    <Content Include="Css\style-53-531.css" />
+    <Content Include="Css\style-47-471.css" />
+    <Content Include="Css\style-45-451.css" />
+    <Content Include="Css\style-46-461.css" />
+    <Content Include="Css\style-42-421.css" />
+    <Content Include="Css\style-29-1.css" />
+    <Content Include="Css\style-41-1.css" />
+    <Content Include="Css\style-43-431.css" />
+    <Content Include="Css\style-37-1.css" />
+    <Content Include="Css\style-4-41.css" />
+    <Content Include="Css\style-33-1.css" />
+    <Content Include="Css\style-5-1.css" />
+    <Content Include="Css\style-59-591.css" />
+    <Content Include="Css\style-61-611.css" />
+    <Content Include="Css\style-67-671.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Css\Site.css" />
+    <Content Include="images\attch.gif" />
+    <Content Include="images\Bookntrvl-logo.png" />
+    <Content Include="images\calender.png" />
+    <Content Include="images\da.png" />
+    <Content Include="images\db_welcome.jpg" />
+    <Content Include="images\details_open.png" />
+    <Content Include="images\faliedbookings.png" />
+    <Content Include="images\KKimg.jpg" />
+    <Content Include="images\loading1.gif" />
+    <Content Include="images\loading2.gif" />
+    <Content Include="images\loading3.gif" />
+    <Content Include="images\loading4.gif" />
+    <Content Include="images\postbyagws.png" />
+    <Content Include="images\RRimg.jpg" />
+    <Content Include="images\RRimg1.jpg" />
+    <Content Include="images\servicesbookings.png" />
+    <Content Include="images\sic-35-352.png" />
+    <Content Include="images\sml-loading-1-50.gif" />
+    <Content Include="images\sml-loading-1-27.gif" />
+    <Content Include="images\sml-loading-1-39.gif" />
+    <Content Include="images\sml-loading-1-40.gif" />
+    <Content Include="images\sml-loading-1-63.gif" />
+    <Content Include="images\sml-loading-1-72.gif" />
+    <Content Include="images\sml-loading-1-73.gif" />
+    <Content Include="images\sml-loading-1-71.gif" />
+    <Content Include="images\sml-loading-1-70.gif" />
+    <Content Include="images\sml-loading-1-69.gif" />
+    <Content Include="images\sml-loading-1-68.gif" />
+    <Content Include="images\sml-loading-1-67.gif" />
+    <Content Include="images\sml-loading-1-66.gif" />
+    <Content Include="images\sml-loading-1-65.gif" />
+    <Content Include="images\sml-loading-1-64.gif" />
+    <Content Include="images\sml-loading-31-311.gif" />
+    <Content Include="images\sml-loading-33-1.gif" />
+    <Content Include="images\sml-loading-34-1.gif" />
+    <Content Include="images\sml-loading-36-1.gif" />
+    <Content Include="images\sml-loading-1-1.gif" />
+    <Content Include="images\sml-loading-37-1.gif" />
+    <Content Include="images\sml-loading-4-41.gif" />
+    <Content Include="images\sml-loading-41-1.gif" />
+    <Content Include="images\sml-loading-42-421.gif" />
+    <Content Include="images\sml-loading-43-431.gif" />
+    <Content Include="images\sml-loading-45-451.gif" />
+    <Content Include="images\sml-loading-46-461.gif" />
+    <Content Include="images\sml-loading-47-473.gif" />
+    <Content Include="images\sml-loading-47-471.gif" />
+    <Content Include="images\sml-loading-47-472.gif" />
+    <Content Include="images\sml-loading-47-474.gif" />
+    <Content Include="images\sml-loading-48-481.gif" />
+    <Content Include="images\sml-loading-5-1.gif" />
+    <Content Include="images\sml-loading-29-1.gif" />
+    <Content Include="images\sml-loading-59-591.gif" />
+    <Content Include="images\sml-loading-57-571.gif" />
+    <Content Include="images\sml-loading-51-513.gif" />
+    <Content Include="images\sml-loading-51-511.gif" />
+    <Content Include="images\sml-loading-53-531.gif" />
+    <Content Include="images\sml-loading-54-541.gif" />
+    <Content Include="images\sml-loading-58-581.gif" />
+    <Content Include="images\sml-loading-61-611.gif" />
+    <Content Include="images\sml-loading-63-631.gif" />
+    <Content Include="images\sml-loading-64-641.gif" />
+    <Content Include="images\sml-loading-66-661.gif" />
+    <Content Include="images\timeout.png" />
+    <Content Include="images\ui-icons_ffffff_256x240.png" />
+    <Content Include="images\XXimg.png" />
+    <Content Include="libs\angucomplete-alt.js" />
+    <Content Include="libs\angular-1.6.6\angular-animate.js" />
+    <Content Include="libs\angular-1.6.6\angular-animate.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-aria.js" />
+    <Content Include="libs\angular-1.6.6\angular-aria.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-cookies.js" />
+    <Content Include="libs\angular-1.6.6\angular-cookies.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-loader.js" />
+    <Content Include="libs\angular-1.6.6\angular-loader.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-message-format.js" />
+    <Content Include="libs\angular-1.6.6\angular-message-format.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-messages.js" />
+    <Content Include="libs\angular-1.6.6\angular-messages.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-mocks.js" />
+    <Content Include="libs\angular-1.6.6\angular-parse-ext.js" />
+    <Content Include="libs\angular-1.6.6\angular-parse-ext.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-resource.js" />
+    <Content Include="libs\angular-1.6.6\angular-resource.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-route.js" />
+    <Content Include="libs\angular-1.6.6\angular-route.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-sanitize.js" />
+    <Content Include="libs\angular-1.6.6\angular-sanitize.min.js" />
+    <Content Include="libs\angular-1.6.6\angular-scenario.js" />
+    <Content Include="libs\angular-1.6.6\angular-touch.js" />
+    <Content Include="libs\angular-1.6.6\angular-touch.min.js" />
+    <Content Include="libs\angular-1.6.6\angular.js" />
+    <Content Include="libs\angular-1.6.6\angular.min.js" />
+    <Content Include="libs\angular-material_1_1_3.js" />
+    <Content Include="libs\bootstap-3.3.7.min.js" />
+    <Content Include="libs\bootstarp-multiselect.js" />
+    <Content Include="libs\bootstrap-slider.js" />
+    <Content Include="libs\bootstrap.js" />
+    <Content Include="libs\bootstrap.min.js" />
+    <Content Include="libs\dataTables.rowGroup.min.js" />
+    <Content Include="libs\dataTables.scroller.js" />
+    <Content Include="libs\dataTables.scroller.min.js" />
+    <Content Include="libs\DataTables\autoFill.bootstrap.js" />
+    <Content Include="libs\DataTables\autoFill.bootstrap.min.js" />
+    <Content Include="libs\DataTables\autoFill.bootstrap4.js" />
+    <Content Include="libs\DataTables\autoFill.bootstrap4.min.js" />
+    <Content Include="libs\DataTables\autoFill.foundation.js" />
+    <Content Include="libs\DataTables\autoFill.foundation.min.js" />
+    <Content Include="libs\DataTables\autoFill.jqueryui.js" />
+    <Content Include="libs\DataTables\autoFill.jqueryui.min.js" />
+    <Content Include="libs\DataTables\autoFill.semanticui.js" />
+    <Content Include="libs\DataTables\autoFill.semanticui.min.js" />
+    <Content Include="libs\DataTables\buttons.bootstrap.js" />
+    <Content Include="libs\DataTables\buttons.bootstrap.min.js" />
+    <Content Include="libs\DataTables\buttons.bootstrap4.js" />
+    <Content Include="libs\DataTables\buttons.bootstrap4.min.js" />
+    <Content Include="libs\DataTables\buttons.colVis.js" />
+    <Content Include="libs\DataTables\buttons.colVis.min.js" />
+    <Content Include="libs\DataTables\buttons.flash.js" />
+    <Content Include="libs\DataTables\buttons.flash.min.js" />
+    <Content Include="libs\DataTables\buttons.foundation.js" />
+    <Content Include="libs\DataTables\buttons.foundation.min.js" />
+    <Content Include="libs\DataTables\buttons.html5.js" />
+    <Content Include="libs\DataTables\buttons.html5.min.js" />
+    <Content Include="libs\DataTables\buttons.jqueryui.js" />
+    <Content Include="libs\DataTables\buttons.jqueryui.min.js" />
+    <Content Include="libs\DataTables\buttons.print.js" />
+    <Content Include="libs\DataTables\buttons.print.min.js" />
+    <Content Include="libs\DataTables\buttons.semanticui.js" />
+    <Content Include="libs\DataTables\buttons.semanticui.min.js" />
+    <Content Include="libs\DataTables\dataTables.autoFill.js" />
+    <Content Include="libs\DataTables\dataTables.autoFill.min.js" />
+    <Content Include="libs\DataTables\dataTables.bootstrap.js" />
+    <Content Include="libs\DataTables\dataTables.bootstrap.min.js" />
+    <Content Include="libs\DataTables\dataTables.bootstrap4.js" />
+    <Content Include="libs\DataTables\dataTables.bootstrap4.min.js" />
+    <Content Include="libs\DataTables\dataTables.buttons.js" />
+    <Content Include="libs\DataTables\dataTables.buttons.min.js" />
+    <Content Include="libs\DataTables\dataTables.colReorder.js" />
+    <Content Include="libs\DataTables\dataTables.colReorder.min.js" />
+    <Content Include="libs\DataTables\dataTables.fixedColumns.js" />
+    <Content Include="libs\DataTables\dataTables.fixedColumns.min.js" />
+    <Content Include="libs\DataTables\dataTables.fixedHeader.js" />
+    <Content Include="libs\DataTables\dataTables.fixedHeader.min.js" />
+    <Content Include="libs\DataTables\dataTables.foundation.js" />
+    <Content Include="libs\DataTables\dataTables.foundation.min.js" />
+    <Content Include="libs\DataTables\dataTables.jqueryui.js" />
+    <Content Include="libs\DataTables\dataTables.jqueryui.min.js" />
+    <Content Include="libs\DataTables\dataTables.keyTable.js" />
+    <Content Include="libs\DataTables\dataTables.keyTable.min.js" />
+    <Content Include="libs\DataTables\dataTables.material.js" />
+    <Content Include="libs\DataTables\dataTables.material.min.js" />
+    <Content Include="libs\DataTables\dataTables.responsive.js" />
+    <Content Include="libs\DataTables\dataTables.responsive.min.js" />
+    <Content Include="libs\DataTables\dataTables.rowGroup.js" />
+    <Content Include="libs\DataTables\dataTables.rowGroup.min.js" />
+    <Content Include="libs\DataTables\dataTables.rowReorder.js" />
+    <Content Include="libs\DataTables\dataTables.rowReorder.min.js" />
+    <Content Include="libs\DataTables\dataTables.scroller.js" />
+    <Content Include="libs\DataTables\dataTables.scroller.min.js" />
+    <Content Include="libs\DataTables\dataTables.select.js" />
+    <Content Include="libs\DataTables\dataTables.select.min.js" />
+    <Content Include="libs\DataTables\dataTables.semanticui.js" />
+    <Content Include="libs\DataTables\dataTables.semanticui.min.js" />
+    <Content Include="libs\DataTables\dataTables.uikit.js" />
+    <Content Include="libs\DataTables\dataTables.uikit.min.js" />
+    <Content Include="libs\DataTables\jquery.dataTables.js" />
+    <Content Include="libs\DataTables\jquery.dataTables.min.js" />
+    <Content Include="libs\DataTables\responsive.bootstrap.js" />
+    <Content Include="libs\DataTables\responsive.bootstrap.min.js" />
+    <Content Include="libs\DataTables\responsive.bootstrap4.js" />
+    <Content Include="libs\DataTables\responsive.bootstrap4.min.js" />
+    <Content Include="libs\DataTables\responsive.foundation.js" />
+    <Content Include="libs\DataTables\responsive.foundation.min.js" />
+    <Content Include="libs\DataTables\responsive.jqueryui.js" />
+    <Content Include="libs\DataTables\responsive.jqueryui.min.js" />
+    <Content Include="libs\DataTables\responsive.semanticui.js" />
+    <Content Include="libs\DataTables\responsive.semanticui.min.js" />
+    <Content Include="libs\jquery-1.10.2.js" />
+    <Content Include="libs\jquery-1.10.2.min.js" />
+    <Content Include="libs\jquery-3.2.1.min.js" />
+    <Content Include="libs\jquery-ui-1.12.1.js" />
+    <Content Include="libs\jquery.dataTables.min.js" />
+    <Content Include="libs\jszip.min.js" />
+    <Content Include="libs\pdfmake.js" />
+    <Content Include="libs\scroller.dataTables.js" />
+    <Content Include="libs\timer.js" />
+    <Content Include="libs\vfs_fonts.js" />
+    <Content Include="ReadMe-Note.html" />
+    <Content Include="ReportViewerWebForm.aspx" />
+    <Content Include="Scripts\accountreport2.js" />
+    <Content Include="Scripts\AccountReportV2.js" />
+    <Content Include="Scripts\AgencyActivityApiOut.js" />
+    <Content Include="Scripts\AgencyActivityReport.js" />
+    <Content Include="Scripts\AgencyPerformanceReport.js" />
+    <Content Include="Scripts\AgencyUserReport.js" />
+    <Content Include="Scripts\AllCities.js" />
+    <Content Include="Scripts\AngularUtility.js" />
+    <Content Include="Scripts\Booking.js" />
+    <Content Include="Scripts\BookingErrLWClients.js" />
+    <Content Include="Scripts\BookingErrLWDest.js" />
+    <Content Include="Scripts\BookingErrLWSupp.js" />
+    <Content Include="Scripts\CancelationClient.js" />
+    <Content Include="Scripts\CancelationDestination.js" />
+    <Content Include="Scripts\CancelationHotel.js" />
+    <Content Include="Scripts\CancelationSupplier.js" />
+    <Content Include="Scripts\ClientsGrowthVsLWDestination.js" />
+    <Content Include="Scripts\ClientsGrowthVsLWRN.js" />
+    <Content Include="Scripts\ClientsGrowthVsLW_Bookings.js" />
+    <Content Include="Scripts\ContractReport.js" />
+    <Content Include="Scripts\CorporateCardUseReport.js" />
+    <Content Include="Scripts\DailySalesReport.js" />
+    <Content Include="Scripts\Destination.js" />
+    <Content Include="Scripts\DestinationSales.js" />
+    <Content Include="Scripts\FailedBookingReport.js" />
+    <Content Include="Scripts\GstReport.js" />
+    <Content Include="Scripts\HomeDashboard_V1.js" />
+    <Content Include="Scripts\HotelMizeReport.js" />
+    <Content Include="Scripts\HotelProductivityReportAPI.js" />
+    <Content Include="Scripts\HotelRNReport.js" />
+    <Content Include="Scripts\HotelSales.js" />
+    <Content Include="Scripts\HQProductivityReport.js" />
+    <Content Include="Scripts\LMVsEarlyBookingsClients.js" />
+    <Content Include="Scripts\LMVsEarlyBookingsDestination.js" />
+    <Content Include="Scripts\LMVsEarlyBookingsHotel.js" />
+    <Content Include="Scripts\LMVsEarlyBookingsSupplier.js" />
+    <Content Include="Scripts\MarketingFeeReport.js" />
+    <Content Include="Scripts\MemberCreditDetailsReport.js" />
+    <Content Include="Scripts\NetStatementReport.js" />
+    <Content Include="Scripts\NRVsRefundableClient.js" />
+    <Content Include="Scripts\NRVsRefundableDestination.js" />
+    <Content Include="Scripts\NRVsRefundableHotel.js" />
+    <Content Include="Scripts\NRVsRefundableSupplier.js" />
+    <Content Include="Scripts\OperationalIssueReport.js" />
+    <Content Include="Scripts\OverviewRpt.js" />
+    <Content Include="Scripts\PickupReport.js" />
+    <Content Include="Scripts\CountryProductivityReport.js" />
+    <Content Include="Scripts\SalesOverview.js" />
+    <Content Include="Scripts\SalesPersonWiseReport.js" />
+    <Content Include="Scripts\SalesProductivityReport.js" />
+    <Content Include="Scripts\SearchAgentBookingReport.js" />
+    <Content Include="Scripts\SearchCityBookingReport.js" />
+    <Content Include="Scripts\SearchToBookingReport.js" />
+    <Content Include="Scripts\SupplierOverviewReport.js" />
+    <Content Include="Scripts\SupplierSelloutReport.js" />
+    <Content Include="Scripts\BookStatusReport.js" />
+    <Content Include="Scripts\AgentProductivityReport.js" />
+    <Content Include="Scripts\BranchProductivityReport.js" />
+    <Content Include="Scripts\CommonUtility.js" />
+    <Content Include="Scripts\CreditReport.js" />
+    <Content Include="Scripts\CreditReport2.js" />
+    <Content Include="Scripts\Home.js" />
+    <Content Include="Scripts\dialog.js" />
+    <Content Include="Scripts\Home-old.js" />
+    <Content Include="Scripts\HotelProductivityReport.js" />
+    <Content Include="Scripts\Login.js" />
+    <Content Include="Scripts\Model.js" />
+    <Content Include="Scripts\Popup.js" />
+    <Content Include="Scripts\PostBooking.js" />
+    <Content Include="Scripts\ProductionReport.js" />
+    <Content Include="Scripts\ProfitLossReport.js" />
+    <Content Include="Scripts\SalesReport.js" />
+    <Content Include="Scripts\ServiceBookingReport.js" />
+    <Content Include="Scripts\SupplierVsClientReport.js" />
+    <Content Include="Scripts\SuppTopSellDestRpt.js" />
+    <Content Include="Scripts\SuppTopSellHotelRpt.js" />
+    <Content Include="Scripts\TopUpReport.js" />
+    <Content Include="Scripts\TransactionReport.js" />
+    <Content Include="Scripts\UserSalesReport.js" />
+    <Content Include="Scripts\XConProfitLossReport.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ErrorFile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <Content Include="libs\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Homeold.cshtml" />
+    <Content Include="Views\Home\Booking.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Shared\PostBookingPartial.cshtml" />
+    <Content Include="Views\Home\menusample.cshtml" />
+    <Content Include="Views\Shared\MainLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Account1.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Account1Start.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptAccountreport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptBooking.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptCredit.rdlc" />
+    <EmbeddedResource Include="Reports\RptBRCompareReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptHome.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptDashboard.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\RptHomeNew.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Rpt_Test.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Report.BLL\Report.BLL.csproj">
+      <Project>{A1B441D3-171A-41D2-A868-9563D0AFDDD9}</Project>
+      <Name>Report.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Report.DAL\Report.DAL.csproj">
+      <Project>{5B6AD537-1CDA-4DF6-8DD8-018B6B5F8369}</Project>
+      <Name>Report.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Report.DO\Report.DO.csproj">
+      <Project>{C4F69B48-3550-44DA-BDA4-C391D90AAD5A}</Project>
+      <Name>Report.DO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\ServiceCredentials.json" />
+    <None Include="Properties\PublishProfiles\Report.pubxml" />
+    <Content Include="Views\Shared\FilterPopupPartial.cshtml" />
+    <Content Include="Views\Booking\CreditReport.cshtml" />
+    <Content Include="Views\Booking\AccountReport.cshtml" />
+    <Content Include="Views\Booking\CreditReportDT.cshtml" />
+    <Content Include="Views\Booking\SalesReport.cshtml" />
+    <Content Include="Views\Booking\ProductionReport.cshtml" />
+    <Content Include="Views\Booking\ProfitLossReport.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
+    <Content Include="Views\Shared\YearlyGraphPartial.cshtml" />
+    <Content Include="Views\Dashboard\BookStatusReport.cshtml" />
+    <Content Include="Views\Dashboard\ServiceBookingReport.cshtml" />
+    <Content Include="Views\Production\HotelProductivityReport.cshtml" />
+    <Content Include="Views\Dashboard\BranchProductivityReport.cshtml" />
+    <Content Include="Views\Dashboard\AgentProductivityReport.cshtml" />
+    <Content Include="Views\Dashboard\SupplierSelloutReport.cshtml" />
+    <Content Include="Views\Dashboard\FailedBookingReport.cshtml" />
+    <Content Include="Views\Booking\NetStatementReport.cshtml" />
+    <Content Include="Views\Booking\DailySalesReport.cshtml" />
+    <Content Include="Views\Booking\CorporateCardUseReport.cshtml" />
+    <Content Include="Views\Booking\UserSalesReport.cshtml" />
+    <Content Include="Views\Dashboard\SearchCityBookingReport.cshtml" />
+    <Content Include="Views\Dashboard\SearchAgentBookingReport.cshtml" />
+    <Content Include="Views\Booking\PickupReport.cshtml" />
+    <Content Include="Views\Booking\XConProfitLossReport.cshtml" />
+    <Content Include="Views\Booking\ContractReport1.cshtml" />
+    <Content Include="Views\Booking\AgencyPerformanceReport.cshtml" />
+    <Content Include="Views\Booking\OperationalIssueReport.cshtml" />
+    <Content Include="Views\Booking\TransactionReport.cshtml" />
+    <Content Include="Views\Booking\AgencyUserReport.cshtml" />
+    <Content Include="Views\Production\CountryProductivityReport.cshtml" />
+    <Content Include="Views\Booking\MemberCreditDetailsReport.cshtml" />
+    <Content Include="Views\Booking\HotelMizeReport.cshtml" />
+    <Content Include="Views\Booking\MarketingFeeReport.cshtml" />
+    <Content Include="Views\Production\SalesProductivityReport.cshtml" />
+    <Content Include="Views\Production\HQProductivityReport.cshtml" />
+    <Content Include="Views\Production\HotelProductivityReportAPI.cshtml" />
+    <Content Include="Views\Booking\SalesPersonWiseReport.cshtml" />
+    <Content Include="Views\Dashboard_V1\HotelRNReport.cshtml" />
+    <Content Include="Views\Dashboard_V1\HomeDashboard_V1.cshtml" />
+    <Content Include="Views\Dashboard_V1\Destination.cshtml" />
+    <Content Include="Views\Dashboard_V1\SalesOverview.cshtml" />
+    <Content Include="Views\Dashboard_V1\HotelSales.cshtml" />
+    <Content Include="Views\Dashboard_V1\DestinationSales.cshtml" />
+    <Content Include="Views\Dashboard_V1\OverviewRpt.cshtml" />
+    <Content Include="Views\Dashboard_V1\LMVsEarlyBookingsClients.cshtml" />
+    <Content Include="Views\Dashboard_V1\SupplierVsClient.cshtml" />
+    <Content Include="Views\Dashboard_V1\LMVsEarlyBookingsSupplier.cshtml" />
+    <Content Include="Views\Dashboard_V1\LMVsEarlyBookingsHotel.cshtml" />
+    <Content Include="Views\Dashboard_V1\LMVsEarlyBookingsDestination.cshtml" />
+    <Content Include="Views\Dashboard_V1\CancelationClient.cshtml" />
+    <Content Include="Views\Dashboard_V1\CancelationHotel.cshtml" />
+    <Content Include="Views\Dashboard_V1\CancelationSupplier.cshtml" />
+    <Content Include="Views\Dashboard_V1\CancelationDestination.cshtml" />
+    <Content Include="Views\Dashboard_V1\NRVsRefundableClient.cshtml" />
+    <Content Include="Views\Dashboard_V1\NRVsRefundableSupplier.cshtml" />
+    <Content Include="Views\Dashboard_V1\NRVsRefundableHotel.cshtml" />
+    <Content Include="Views\Dashboard_V1\NRVsRefundableDestination.cshtml" />
+    <Content Include="Views\Dashboard_V1\SupplierOverviewReport.cshtml" />
+    <Content Include="Views\Dashboard_V1\SuppTopSellHotelRpt.cshtml" />
+    <Content Include="Views\Dashboard_V1\SuppTopSellDestRpt.cshtml" />
+    <Content Include="Views\Dashboard\AgencyActivityReport.cshtml" />
+    <Content Include="Views\Dashboard_V1\ClientsGrowthVsLWBookings.cshtml" />
+    <Content Include="Views\Dashboard_V1\ClientsGrowthVsLWRN.cshtml" />
+    <Content Include="Views\Dashboard_V1\ClientsGrowthVsLWDestination.cshtml" />
+    <Content Include="Views\Dashboard_V1\BookingErrLWDest.cshtml" />
+    <Content Include="Views\Dashboard_V1\BookingErrLWSupp.cshtml" />
+    <Content Include="Views\Dashboard_V1\BookingErrLWClients.cshtml" />
+    <Content Include="Views\Booking\TopUpReport.cshtml" />
+    <Content Include="Views\Booking\GSTReport.cshtml" />
+    <Content Include="Views\Dashboard\SearchToBookingReport.cshtml" />
+    <Content Include="Views\Booking\AccountReportV2.cshtml" />
+    <Content Include="Views\Dashboard\AgencyActivityApiOut.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>53842</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:53842/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,68 @@
+﻿
+
+
+<div class="" >
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mrg-top20" id="divbranch">
+        <span class="floating-label-select" id="div_BR" style="display:none;"> Branch <span class="red-color">*</span> </span>
+        <select class="select--hoshi" id="ddl_BR" [style.color]="Branch==undefined?'#676767':'#000'"
+                (input)="Branch=$event.target.value" onchange="changeMe(this, 'div_BR')">
+            <option value="0" selected hidden>Select Branch</option>
+            <option value="0"  id="allbranch" >All Branch</option>
+
+            <option  ng-selected="Br_Id == m.memberid" value="{{m.memberid}}" ng-repeat="m in branchlist">
+                {{m.CompanyName}}
+            </option>
+        </select>
+
+    </div>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mrg-top20" id="Wsdiv" style="display:none;">
+        <span class="floating-label-select" id="div_WS" style="display:none;"> Wholesaler  </span>
+        <select class="select--hoshi" id="ddl_WS" [style.color]="Wholesaler==undefined?'#676767':'#000'"
+                (input)="Wholesaler=$event.target.value" onchange="changeMe(this, 'div_WS')">
+            <option value="0" selected>Select Wholesaler</option>
+            @*<option value="0">All Wholesaler</option>*@
+            <option ng-selected="Ws_Id == w.memberid" value="{{w.memberid}}" ng-repeat="w in WsFinallist">
+                {{w.CompanyName}}
+            </option>
+        </select>
+
+    </div> 
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mrg-top20" id="agentdiv" style="display:none;">
+        <span class="floating-label-select" id="div_Agent" style="display:none;"> Agent  </span>
+        <select class="select--hoshi" id="ddl_AG" [style.color]="Agent==undefined?'#676767':'#000'"
+                (input)="Agent=$event.target.value" onchange="changeMe(this, 'div_Agent')">
+            <option value="0" selected hidden>Select Agent</option>
+            <option id="allagents" value="0">All Agent</option>
+            <option ng-selected="Ag_Id == a.memberid" value="{{a.memberid}}" ng-repeat="a in agentlist">
+                {{a.CompanyName}}
+            </option>
+        </select>
+
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mrg-top20" id="Userdiv" style="display:none;">
+        <span class="floating-label-select" id="div_User" style="display:none;"> User  </span>
+        <select class="select--hoshi" id="ddl_User" [style.color]="User==undefined?'#676767':'#000'"
+                (input)="User=$event.target.value" onchange="changeMe(this, 'div_User')">
+            @*<option value="0" selected hidden>Select User</option>*@
+            <option value="0">All User</option>
+            <option ng-selected="UserId == u.UserId" value="{{u.UserId}}" ng-repeat="u in Userlist">
+                {{u.UserName}}
+            </option>
+        </select>
+
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 mrg-top20" id="Copdiv" style="display:none;">
+        <span class="floating-label-select" id="div_Cop" style="display:none;"> Agent  </span>
+        <select class="select--hoshi" id="ddlCorporate" [style.color]="Agent==undefined?'#676767':'#000'" onchange="changeMe(this, 'div_WS'), setPostMemberDetails(this)"
+                (input)="Agent=$event.target.value">
+            <option value="0" selected hidden>Select Agent</option>
+            <option ng-selected="Ag_Id == a.memberid" value="{{a.memberid}}" ng-repeat="a in agentlist">
+                {{a.CompanyName}}
+            </option>
+        </select>
+
+    </div>
+</div>
+
+

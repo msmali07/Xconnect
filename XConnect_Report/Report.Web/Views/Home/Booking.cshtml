@@ -1,0 +1,69 @@
+﻿@using Report.BLL;
+@using Report.Web;
+@using ReportViewerForMvc;
+
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+   
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.pdf.min.js"></script>
+
+    <script src="~/Scripts/Booking.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Booking</title>
+
+   
+</head>
+<body ng-app="Bookingapp" ng-controller="bookingCntr" id="MainWrap">
+
+    <a class="btn hover-btn nomargin" ng-click="SearchReportClick()">Search</a>
+   
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+       
+        <a href="javascript:void(0);" ng-click="fnShowHide(0)">Hide BookRef No<br></a>
+        <a href="javascript:void(0);" ng-click="fnShowHide(2)">Hide Nights<br></a>
+        <a href="javascript:void(0);" ng-click="fnShowHide(3)">Hide Pax Names<br></a>
+        <a href="javascript:void(0);" ng-click="fnShowHide(5)">Hide Service name<br></a>
+
+       
+
+        <a style="display:none;" href="javascript:void(0);" ng-click="GroupBy(0)">Group By Status<br></a>
+         <table id="AccountReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs" style="width:100%;font-size:13px;padding: 5px 5px !important;">
+            <thead class="main-head hidden-xs">
+                <tr>
+                   
+                    <th width="8%">Book Ref No</th>
+                    <th width="8%">Service Date</th>
+                    <th width="3%" >Nights</th>
+                    <th width="18%">Pax Name</th>
+                    <th width="8%">Type</th>
+                    <th width="15%">Service Name</th>
+                    <th width="15%">Agency Name</th>
+                    <th width="8%">Sell Amount</th>
+                    <th width="5%">Currency</th>
+                    <th width="12%">Book Status</th>
+
+                </tr>
+               
+            </thead>
+
+        </table>
+        </div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MailSettings>
+  <Server Status="LOCAL">
+
+    <CompCode Id ="37" >
+      <AppUrl Id="123">
+
+        <!--<Smtp Key="booking">
+          <MailServer>66.96.143.162</MailServer>
+          <UserId>booking@atharvainfotech.com</UserId>
+          <Password><![CDATA[Atharva123]]]]></Password>
+          <EnableSSL></EnableSSL>
+          <PortNo>587</PortNo>
+          <FromMailId>info@atharvainfotech.com</FromMailId>
+        </Smtp>-->
+
+        <!--test-->
+        <!--<Smtp Key="booking">
+          <MailServer>66.96.143.162</MailServer>
+          <UserId>booking@atharvainfotech.com</UserId>
+          <Password><![CDATA[Atharva123]]]]></Password>
+          <EnableSSL>true</EnableSSL>
+          <PortNo>587</PortNo>
+          <FromMailId>amit@atharvainfotech.com</FromMailId>
+        </Smtp>-->
+
+        <!--live-->
+        <Smtp Key="reporting">
+          <MailServer>66.96.143.162</MailServer>
+          <UserId>booking@atharvainfotech.com</UserId>
+          <Password><![CDATA[Ath@book20!9]]></Password>
+          <EnableSSL>false</EnableSSL>
+          <PortNo>587</PortNo>
+          <FromMailId>info@atharvainfotech.com</FromMailId>
+        </Smtp>
+
+        <ToMailIds>
+         
+          <ToMailId Type="support">pradnya@atharvainfotech.com</ToMailId>
+         
+        </ToMailIds>
+      </AppUrl>
+    </CompCode>
+
+   
+
+   
+  </Server>
+
+  <Server Status="LIVE">
+  
+
+  </Server>
+</MailSettings>
+

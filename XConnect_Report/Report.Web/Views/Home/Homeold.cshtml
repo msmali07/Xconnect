@@ -1,0 +1,143 @@
+﻿
+@using Report.BLL;
+@using Report.Web;
+@using ReportViewerForMvc;
+@{
+   Layout = "~/Views/Shared/MainLayout.cshtml";
+  
+}
+@model Report.DO.HomeList
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js">
+    </script>
+    <script type="text/javascript">
+         google.charts.load('current', {packages: ['corechart']});
+    </script>
+    
+    <script src="~/Scripts/Home.js?v3"></script>
+   
+</head>
+
+<body ng-app="homeapp" ng-controller="homeCntr" id="MainWrap">
+    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top20" id="Homediv" style="display:none;">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg">
+         
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top10 mrg-lft20">
+
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalbook" >
+                    <div class="countheding">{{BookingCount[0].ALLTotalCount}}</div>                   
+                     <div class="countheadingtxt" style="width:70%">Total Bookings </div>                       
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalKK" >
+                    <div class="countheding">{{BookingCount[0].KKCount}}</div>
+                    <div class="countheadingtxt">Total Confirm Bookings</div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalRR" >
+                    <div class="countheding">{{BookingCount[0].RRCount}}</div>
+                    <div class="countheadingtxt">Total Reconfirm Bookings</div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalXX" >
+                    <div class="countheding">{{BookingCount[0].XXCount}}</div>
+                    <div class="countheadingtxt">Total Cancel Bookings</div>
+                </div>
+             </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20 mrg-lft10 whitebg" style="width:99%">
+                <div class="col-md-6" >
+                    <h4>Top 5 Suppliers (Booking Wise)</h4>
+
+                    <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs">
+                        <thead class="main-head hidden-xs">
+                            <tr>
+                                <th>Supplier Name</th>
+                                <th>Total Bookings</th>                               
+                               
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main">
+
+
+                            <tr ng-repeat="s in TopSupplierList">
+
+                                <td class="data-td-responsive ng-binding" data-td="Agency Name :">{{s.SupplierName}}</td>
+                                <td class="data-td-responsive ng-binding" data-td="Memberid :">{{s.BookingCount}}</td>
+                            
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6 mrg-lft10" style="width:48%;">
+                    <h4>Last 3 Months Booking</h4>
+
+                    <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs">
+                        <thead class="main-head hidden-xs">
+                            <tr>
+                                <th>Month Name</th>
+                                <th>Booking Count</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main">
+
+                            <tr>
+
+                                <td class="data-td-responsive ng-binding" data-td="month :">{{BookingCount[0].CurrentMonthName}}</td>
+                                <td class="data-td-responsive ng-binding" data-td="Agency Name :">{{BookingCount[0].CurrentMonthBooking}}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="data-td-responsive ng-binding" data-td="month :">{{BookingCount[0].LastMonthName}}</td>
+                                <td class="data-td-responsive ng-binding" data-td="Agency Name :">{{BookingCount[0].LastMonthBooking}}</td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="data-td-responsive ng-binding" data-td="month :">{{BookingCount[0].LasttoLastMonthName}}</td>
+                                <td class="data-td-responsive ng-binding" data-td="Agency Name :">{{BookingCount[0].LasttoLastMonthBooking}}</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <br/>
+                    <br/>
+                    <br />
+                    <br />
+                </div>
+             </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 nopadding table-responsive mrg-top05 whitebg mrg-lft10" style="width:99%" >
+                  
+                    @Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer, new { scrolling = "no" })
+                </div>
+
+          
+
+
+
+
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    PopUpController.OpenPopup2("divPopup", "");
+
+                    var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+                   
+                    GetHomeDetails(data);
+                });
+
+            </script>
+
+</body>
+
+    </html>

@@ -1,0 +1,388 @@
+﻿@using Report.BLL;
+@using Report.DAL;
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Css/bootstrap.css" rel="stylesheet" />
+    <script src="~/libs/jquery-1.10.2.min.js"></script>
+    <script src="~/libs/bootstap-3.3.7.min.js"></script>
+    <script src="~/libs/bootstarp-multiselect.js"></script>
+    <link href="~/Css/bootstrap-multiselect.css" rel="stylesheet" />
+    <script src="~/libs/angular-1.6.6/angular.min.js"></script>
+    <link href="~/Css/report.css" rel="stylesheet" />
+    <script src="~/libs/timer.js?v5"></script>
+    <script src="~/Scripts/dialog.js"></script>
+    <link href="~/Css/jquery-ui-1.12.1.css" rel="stylesheet" />
+    <script src="~/libs/jquery-ui-1.12.1.js"></script>
+    <link href="~/Css/dataTables.css?v16" rel="stylesheet" />
+
+    @{        
+        // string Style = string.Format("../Css/style-{0}-{1}.css?v18", @SessionContext.Current.AISession.MainCompCode, @SessionContext.Current.AISession.MainAppURL);
+       //string Style = string.Format("../Css/style-43-431.css?v9");
+        string Style;
+        if (@SessionContext.Current.AISession.MainCompCode == 64 && (@SessionContext.Current.AISession.MainAppURL != 641 && @SessionContext.Current.AISession.MainAppURL != 6423))
+        {
+            Style = string.Format("../Css/style-{0}-{1}.css?v18", 64, 642);
+        }
+        else
+        {
+            Style = string.Format("../Css/style-{0}-{1}.css?v18", @SessionContext.Current.AISession.MainCompCode, @SessionContext.Current.AISession.MainAppURL);
+        }
+    }
+
+
+
+
+
+
+    <link href='@Style' rel="stylesheet" />
+    <script>
+        function myFunction(x) {
+            x.classList.toggle("change");
+        }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example-post').multiselect({
+                includeSelectAllOption: true,
+                enableFiltering: true
+            });
+        });
+
+
+
+
+    </script>
+
+</head>
+<body>
+    <input type="hidden" id="hdnidentity" value="@SessionContext.Current.AISession.SessionId" />
+    <input type="hidden" id="hdnLoginMemberType" value="@SessionContext.Current.AISession.MemberType" />
+    <input type="hidden" id="hdnLoginName" value="@SessionContext.Current.AISession.CompanyName" />
+    <input type="hidden" id="hdnLoginMemberTypeId" value="@SessionContext.Current.AISession.LoginMemberTypeId" />
+    <input type="hidden" id="hdnLoginMemberId" value="@SessionContext.Current.AISession.MemberId" />
+    <input type="hidden" id="hdnLoginUserId" value="@SessionContext.Current.AISession.UserId" />
+
+    <input type="hidden" id="hdnIsTestUser" value="@SessionContext.Current.AISession.TestUser.ToString()" />
+    <input type="hidden" id="hdnIsOverSeas" value="@SessionContext.Current.AISession.IsOverSeas.ToString()" />
+    <input type="hidden" id="hdnSellCurrency" value="@SessionContext.Current.AISession.SellCurrency" />
+
+    <input type="hidden" id="hdnSevices" value="@SessionContext.Current.AISession.Services" />
+    <input type="hidden" id="hdnAppUrl" value="@SessionContext.Current.AISession.ApplicableUrl" />
+    <input type="hidden" id="hdnCCode" value="@SessionContext.Current.AISession.CompCode" />
+    <input type="hidden" id="hdnDisplayCurrency" value="@SessionContext.Current.AISession.DisplayCurrency" />
+    <input type="hidden" id="hdnBranchId" value="@SessionContext.Current.AISession.BranchId" />
+    <input type="hidden" id="hdnAdminLogin" value="@SessionContext.Current.AISession.AdminUser.ToString()" />
+    <input type="hidden" id="hdnParentSite" value="@SessionContext.Current.AISession.ParentSite" />
+    <input type="hidden" id="hdnCrossLogin" value="@SessionContext.Current.AISession.IsCrossLogin.ToString()" />
+
+    <input type="hidden" id="hdnMainAppUrl" value="@SessionContext.Current.AISession.MainAppURL" />
+    <input type="hidden" id="hdnMainCCode" value="@SessionContext.Current.AISession.MainCompCode" />
+
+    <input type="hidden" id="hdnIsSalePerson" value="@SessionContext.Current.AISession.IsSalePerson.ToString()" />
+    <input type="hidden" id="hdnDepartmentId" value="@SessionContext.Current.AISession.DepartmentId.ToString()" />
+
+    @if (@SessionContext.Current.AISession.MainCompCode == 1)
+    {
+        if (@SessionContext.Current.AISession.LoginMemberTypeId == 1)
+        {
+            <input type="hidden" id="hdnIsShowSupplier" value="true" />
+        }
+        else if (@SessionContext.Current.AISession.LoginMemberTypeId == 2 && @SessionContext.Current.AISession.IsOverSeas == true)
+        {
+            <input type="hidden" id="hdnIsShowSupplier" value="true" />
+        }
+        else
+        {
+            <input type="hidden" id="hdnIsShowSupplier" value="false" />
+        }
+
+    }
+    else
+    {
+        if (@SessionContext.Current.AISession.LoginMemberTypeId == 1)
+        {
+            <input type="hidden" id="hdnIsShowSupplier" value="true" />
+        }
+        else
+        {
+            <input type="hidden" id="hdnIsShowSupplier" value="false" />
+        }
+    }
+
+    <header>
+        <div class="container-fluid nopadding">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark mrg-btm0">
+
+
+                <a class="navbar-brand" href="../Home/Home?Identity=@SessionContext.Current.AISession.SessionId">
+                    <img src="@SessionContext.Current.AISession.CompanyLogo" height="75" class="logo-img" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" onclick="myFunction(this)">
+
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+
+                </button>
+                <div class="collapse navbar-collapse pull-right nopadding" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        @if (@SessionContext.Current.AISession.ReportRole.ReportDashBoardV1 == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="Dashboard" target="_blank" href="../Dashboard_V1/HomeDashboard_V1?Identity=@SessionContext.Current.AISession.SessionId">
+                                    Dashboard &nbsp;<i aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        }
+                        @if ((@SessionContext.Current.AISession.LoginMemberTypeId == 1 || @SessionContext.Current.AISession.LoginMemberTypeId == 2) && (@SessionContext.Current.AISession.CompCode == 1))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="Dashboard" href="../Dashboard/SearchToBookingReport?Identity=@SessionContext.Current.AISession.SessionId">
+                                    Searched To Booking Report &nbsp;<i aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        }
+
+                        @if (@SessionContext.Current.AISession.CompCode == 36)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" id="PLReport" href="../Booking/ContractReport1?Identity=@SessionContext.Current.AISession.SessionId">Contract Report</a>
+                            </li>
+                        }
+                        @if (@SessionContext.Current.AISession.ReportRole.AccountReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.NetStatementReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.ProfitAndLossReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.PickupReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.CreditReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.OperationalIssueReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.TransactionReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.MemberCreditDetailsReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.MarketingFee == true ||
+                            @SessionContext.Current.AISession.ReportRole.SalesPersonWiseReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.GstReport == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="BookingReport" data-toggle="dropdown">
+                                    Booking Report &nbsp;<i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                                <div class="dropdown-menu">
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.AccountReport == true)
+                                    {
+                                        if (@SessionContext.Current.AISession.CompCode == 64)
+                                        {
+                                            <a class="dropdown-item" href="../Booking/AccountReportV2?Identity=@SessionContext.Current.AISession.SessionId">Account Statement </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item" href="../Booking/AccountReport?Identity=@SessionContext.Current.AISession.SessionId">Account Statement</a>
+                                        }
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.NetStatementReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/NetStatementReport?Identity=@SessionContext.Current.AISession.SessionId">Net Statement</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.DailySalesReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/DailySalesReport?Identity=@SessionContext.Current.AISession.SessionId">Daily Sales </a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.CorporatAndCardUseReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/CorporateCardUseReport?Identity=@SessionContext.Current.AISession.SessionId">Corporate & Card Use </a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.UserSalesReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/UserSalesReport?Identity=@SessionContext.Current.AISession.SessionId">User Sales </a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.PickupReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/PickupReport?Identity=@SessionContext.Current.AISession.SessionId">Pickup Detail</a>
+                                    }
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.ProfitAndLossReport == true && @SessionContext.Current.AISession.CompCode != 1)
+                                    {
+                                        <a class="dropdown-item" id="XCPLReport" href="../Booking/XConProfitLossReport?Identity=@SessionContext.Current.AISession.SessionId">Profit And Loss Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.ProfitAndLossReport == true && @SessionContext.Current.AISession.CompCode == 1)
+                                    {
+                                        <a class="dropdown-item" id="PLReport" href="../Booking/ProfitLossReport?Identity=@SessionContext.Current.AISession.SessionId">Profit And Loss Report</a>
+                                    }
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.CreditReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/CreditReportDT?Identity=@SessionContext.Current.AISession.SessionId">Ledger Report</a>
+                                        if (@SessionContext.Current.AISession.CompCode != 1)
+                                        {
+                                            <a class="dropdown-item" href="../Booking/TopUpReport?Identity=@SessionContext.Current.AISession.SessionId">TopUp Report</a>
+                                        }
+                                    }
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.TransactionReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/TransactionReport?Identity=@SessionContext.Current.AISession.SessionId">Transaction Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.OperationalIssueReport == true)
+                                    {
+                                        <a class="dropdown-item" id="OPLReport" href="../Booking/OperationalIssueReport?Identity=@SessionContext.Current.AISession.SessionId">Operational Issue Report</a>
+                                    }
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.MemberCreditDetailsReport == true && (@SessionContext.Current.AISession.LoginMemberTypeId == 1 || @SessionContext.Current.AISession.LoginMemberTypeId == 2))
+                                    {
+                                        <a class="dropdown-item" href="../Booking/MemberCreditDetailsReport?Identity=@SessionContext.Current.AISession.SessionId">Member Credit Details Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.MarketingFee == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/MarketingFeeReport?Identity=@SessionContext.Current.AISession.SessionId">Marketing Fee Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.SalesPersonWiseReport == true && (@SessionContext.Current.AISession.LoginMemberTypeId == 1 || @SessionContext.Current.AISession.LoginMemberTypeId == 2))
+                                    {
+                                        <a class="dropdown-item" href="../Booking/SalesPersonWiseReport?Identity=@SessionContext.Current.AISession.SessionId">Sales Person Wise Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.GstReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/GSTReport?Identity=@SessionContext.Current.AISession.SessionId">GST Report</a>
+                                    }
+                                </div>
+                            </li>
+                        }
+
+                        @if (@SessionContext.Current.AISession.ReportRole.HotelProductivityReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.AgencyPerformanceReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.AgencyUserReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.CountryProductivityReport == true ||
+                            @SessionContext.Current.AISession.ReportRole.HotelProductivityReportAPI == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="ProductivityReport" href="#" data-toggle="dropdown">
+                                    Productivity Report &nbsp;<i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+
+                                <div class="dropdown-menu">
+                                    @if (@SessionContext.Current.AISession.ReportRole.AgencyPerformanceReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/AgencyPerformanceReport?Identity=@SessionContext.Current.AISession.SessionId">Agency Performance Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.HotelProductivityReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Production/HotelProductivityReport?Identity=@SessionContext.Current.AISession.SessionId">Hotel Productivity Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.AgencyUserReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Booking/AgencyUserReport?Identity=@SessionContext.Current.AISession.SessionId">Agency User Report</a>
+                                    }
+
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.CountryProductivityReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Production/CountryProductivityReport?Identity=@SessionContext.Current.AISession.SessionId">Country City Productivity Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.SalesProductivityReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Production/SalesProductivityReport?Identity=@SessionContext.Current.AISession.SessionId">Sales Person Productivity Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.ReportRole.HQProductivityReport == true)
+                                    {
+                                        <a class="dropdown-item" href="../Production/HQProductivityReport?Identity=@SessionContext.Current.AISession.SessionId">HQ User Productivity Report</a>
+                                    }
+                                    @if (@SessionContext.Current.AISession.LoginMemberTypeId == 1 || @SessionContext.Current.AISession.LoginMemberTypeId == 2)
+                                    {
+                                        <a class="dropdown-item" href="../Dashboard/SearchCityBookingReport?Identity=@SessionContext.Current.AISession.SessionId">Searched City Bookings Report</a>
+                                        <a class="dropdown-item" href="../Dashboard/SearchAgentBookingReport?Identity=@SessionContext.Current.AISession.SessionId">Searched Agent Bookings Report</a>
+                                        @*<a class="dropdown-item" href="../Dashboard/SearchToBookingReport?Identity=@SessionContext.Current.AISession.SessionId">Searched To Bookings Report</a>*@
+
+                                    }
+
+                                    @if (@SessionContext.Current.AISession.ReportRole.HotelProductivityReportAPI == true)
+                                    {
+                                        <a class="dropdown-item" href="../Production/HotelProductivityReportAPI?Identity=@SessionContext.Current.AISession.SessionId">Hotel Productivity Report API</a>
+                                    }
+                                </div>
+                            </li>
+                        }
+                        @if (@SessionContext.Current.AISession.CompCode == 1 && @SessionContext.Current.AISession.ReportRole.HotelMizeReport == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="HotelMizeReport" href="../Booking/HotelMizeReport?Identity=@SessionContext.Current.AISession.SessionId">
+                                    HotelMize Report &nbsp;<i aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+
+    <div id="MainBody" runat="server" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
+
+        @RenderBody()
+
+    </div>
+
+    <div class="container-fluid nopadding">
+        <footer>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 nopadding text-center-sm text-center-xs">
+
+                <span>Copyright @@ @SessionContext.Current.AISession.CompanyName &nbsp;| &nbsp; All rights reserved.</span>
+
+
+
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 nopadding text-right text-center-sm text-center-xs">
+                @if (@SessionContext.Current.AISession.CompCode != 46)
+                {
+                    <span>Powered By - <a href="http://atharvainfotech.com/" target="_blank">Atharva Infotech Pvt. Ltd.</a></span>
+                }
+
+            </div>
+        </footer>
+    </div>
+    <div id="dialogoverlay"></div>
+    <div id="dialogbox">
+        <div>
+            <div id="dialogboxhead"></div>
+            <div id="dialogboxbody"></div>
+            <div id="dialogboxfoot"></div>
+        </div>
+    </div>
+    <div id="divPopup">
+
+    </div>
+</body>
+</html>
+<script src="~/Scripts/PostBooking.js?v5"></script>
+<script src="~/Scripts/CommonUtility.js?v28"></script>
+<script src="~/Scripts/Popup.js?v6"></script>
+<script src="~/Scripts/Model.js?v25"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        localStorage.setItem("Parentwebsite", $("#hdnParentSite").val());
+
+
+
+    });
+
+    $(function () {
+
+        var fnTimeOut = function () {
+            jQuery.timeoutDialog.setupDialogTimer({
+                timeout: 7200,
+                countdown: 60,
+                logout_redirect_url: '../Login/Login',
+                keep_alive_url: '@Url.Action("Keepalive", "Login")'
+            });
+        };
+        fnTimeOut();
+    });
+
+
+
+</script>

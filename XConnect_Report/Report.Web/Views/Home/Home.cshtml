@@ -1,0 +1,720 @@
+﻿
+
+@using Report.BLL;
+@using Report.Web;
+@using ReportViewerForMvc;
+@{
+    Layout = "~/Views/Shared/MainLayout.cshtml";
+
+}
+@model Report.DO.HomeList
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Home</title>
+
+    <script src="~/Scripts/Home.js?v20"></script>
+    <style type="text/css">
+        #Datediv > img {
+            margin-bottom: 6px;
+        }
+
+        .autowidth {
+            white-space: unset;
+        }
+
+
+      
+    </style>
+</head>
+@if (@SessionContext.Current.AISession.ReportRole.Dashboard == true)
+{
+    <body ng-app="homeapp" ng-controller="homeCntr" id="MainWrap">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 whitebg mrg-btm0 nopadding" style="margin-top: -9px !important;" id="DivHomehedaer">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top10" id="Datediv" style="border-bottom: 1px solid #9e9e9e9e;padding-left: 35px;">
+
+                <span style="font-size:18px;font-weight:bold;">As On {{BasedOnDate}}&nbsp;<span id="selecteddate"></span> </span>
+                <input type="hidden" title="Select Date for Dashborad" id="hiddenInput" />
+
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 30px;">
+
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                    <label class="mrg-top05">
+                        Based On:
+                    </label>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+
+                    <select class="select--hoshi padd-lft05" id="ddl_basedon" style="width:121%;margin-left:-20px !important">
+
+                        <option ng-selected="BasedOn == '1'" value="1">Book Date</option>
+                        <option ng-selected="BasedOn == '2'" value="2">Service Date</option>
+
+                    </select>
+                </div>
+
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+                    <label class="mrg-top05">
+                        In Terms Of:
+                    </label>
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 mrg-btm20 mrg-top20">
+
+                    <select class="select--hoshi" id="ddl_terms" style="margin-left:-10px !important">
+
+                        <option ng-selected="InTermsOf == '1'" value="1">Count</option>
+                        <option ng-selected="InTermsOf == '2'" value="2">Value</option>
+
+                    </select>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mrg-top20 " id="Divcurrency" style="display:none;">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">
+                        <label class="mrg-top05">
+                            Currency:
+                        </label>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                        <select class="select--hoshi" id="ddl_currency" style="margin-left:-15px !important">
+
+
+                            @*<option ng-selected="LoginSellCurrency == 'INR'" value="INR">INR</option>
+                                <option ng-selected="LoginSellCurrency == 'AED'" value="AED">AED</option>
+                                <option ng-selected="LoginSellCurrency == 'USD'" value="USD">USD</option>*@
+
+
+                            <option value="0">Select</option>
+                            <option ng-selected="LoginSellCurrency == c.CurrencyCode" value="{{c.CurrencyCode}}" ng-repeat="c in Currencylist">
+                                {{c.CurrencyCode}}
+                            </option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mrg-top20 " id="DivBranch" style="display:none;">
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 ">
+                        <label class="mrg-top05">
+                            Branch:
+                        </label>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                        <select class="select--hoshi" id="ddl_branch" style="margin-left:20px !important">
+                            <option value="0">All Branch</option>
+                            <option value="{{m.memberid}}" ng-repeat="m in branchlist">
+                                {{m.CompanyName}}
+                            </option>
+
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mrg-top05" id="Homediv">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top10 mrg-lft20">
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalKK">
+                        <a ng-click="Statusclick('Confirmed');" style="cursor:pointer;text-decoration: none !important;color:black;" title="Click to view more">
+                            <div class="countheding ng-binding">{{BookingCount.Confirmed}}</div>
+                            <div class="countheadingtxt">Confirmed</div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalRR">
+                        <a ng-click="Statusclick('Reconfirmed');" style="cursor:pointer;text-decoration: none !important;color:black;" title="Click to view more">
+                            <div class="countheding ng-binding">{{BookingCount.Reconfirmed}}</div>
+                            <div class="countheadingtxt">Reconfirmed</div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalXX">
+                        <a ng-click="Statusclick('Cancelled');" style="cursor:pointer;text-decoration: none !important;color:black;" title="Click to view more">
+                            <div class="countheding ng-binding">{{BookingCount.Cancelled}}</div>
+                            <div class="countheadingtxt">Cancelled</div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalbook">
+                        <a ng-click="Statusclick('Failed');" style="cursor:pointer;text-decoration: none !important;color:black;" title="Click to view more">
+                            <div class="countheding ng-binding">{{BookingCount.Failed}}</div>
+                            <div class="countheadingtxt" style="width:70%">Failed </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mtb10 hdbg padd-10-20 mrg-rgt20 totalRQ">
+                        <a ng-click="Statusclick('Requested');" style="cursor:pointer;text-decoration: none !important;color:black;" title="Click to view more">
+                            <div class="countheding ng-binding">{{BookingCount.Requested }}</div>
+                            <div class="countheadingtxt" style="width:70%">Requested </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20 mrg-lft10 padd-lft05" style="width:99%">
+
+                    <div class="panel Hmpanel-table" style="min-height:auto !important;">
+                        <div class="Hmpanel-heading">
+                            <h4 class="Hmpanel-title">Servicewise Booking List</h4>
+                            <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                            <a ng-click="ServiceBookViewMore();" class="HmView-more2" title="Click to view more">View More</a>
+                        </div>
+                        <div ng-show="servicebookingNoRecords">
+                            <sapn>No Records Found</sapn>
+                        </div>
+                        <div ng-show="servicebookingDataLoading">
+                            <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                        </div>
+
+                        <div style="padding: 17px;">
+                            <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse" style="" ng-show="ServiceBookingList.length > 0">
+                                <thead class="main-head hidden-xs">
+                                    <tr>
+                                        <th class="text-center" width="50%">Service Name</th>
+                                        <th class="text-center" colspan="2">Online &nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        <th class="text-center">Offline</th>
+
+                                        <th class="text-center">Total </th>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td></td>
+                                        @*<td><span style="float:left;"><u>Direct</u></span> &nbsp;&nbsp;  <span style="float:right;"><u>Posted</u></sapn></td>*@
+                                        <td class="text-center"><u>Direct</u></td>
+                                        <td class="text-center"><u>Posted</u></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>
+
+                                </thead>
+                                <tbody class="hsrr-tbody-main">
+                                    <tr ng-repeat="s in ServiceBookingList">
+                                        <td>
+                                            {{s.Service}}
+                                        </td>
+
+                                        <td style="text-align:center !important;" ng-hide="s.Service =='Miscellaneous' || s.Service =='Offline Package' || s.Service =='Escorted Tours'">
+                                            {{s.OnlineDirect}}
+
+                                        </td>
+                                        <td style="text-align:center !important;" ng-hide="s.Service =='Miscellaneous' || s.Service =='Offline Package' || s.Service =='Escorted Tours'">
+
+                                            {{s.OnlinePosted}}
+                                        </td>
+                                        <td style="text-align:center !important;" ng-show="s.Service =='Miscellaneous' || s.Service =='Offline Package' || s.Service =='Escorted Tours'">
+                                            -
+
+                                        </td>
+                                        <td style="text-align:center !important;" ng-show="s.Service =='Miscellaneous' || s.Service =='Offline Package' || s.Service =='Escorted Tours'">
+
+                                            -
+                                        </td>
+
+
+                                        <td style="text-align:center !important;" class="padd-rgt05" ng-hide="s.Service =='Online Package' || s.Service=='Rail Europe' ">
+                                            {{s.OfflineDirect +s.OfflinePosted  }}
+                                        </td>
+                                        <td style="text-align:center !important;" class="padd-rgt05" ng-show="s.Service =='Online Package' || s.Service=='Rail Europe'">
+                                            -
+                                        </td>
+
+                                        <td style="text-align:center !important;" class="padd-rgt05">
+                                            {{s.Total}}
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-show="logintype == '1'" id="BranchReportDiv" style="">
+
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Branch Productivity</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="BrReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="BrNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="BrDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="logintype == '1' && TopBranchList.length > 0 ">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th width="80%">Branch Name</th>
+                                            <th class="text-center" ng-if="InTermsOf=='1'"> Bookings</th>
+                                            <th class="text-center" ng-if="InTermsOf=='2'"> Sell &nbsp;({{Currency}})</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+
+                                        <tr ng-repeat="b in TopBranchList">
+
+                                            <td class="data-td-responsive ng-binding autowidth" style="padding-left:20px !important;" data-td="Branch Name :">{{b.BranchName}}{{b.City}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" ng-if="InTermsOf=='1'" data-td="Count :">{{b.BookingCount}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" ng-if="InTermsOf=='2'" data-td="Sell :">{{b.TotalSelling.toFixed(2)}}</td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="" ng-show="logintype != '4'">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Agent Productivity</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="AgReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="AgNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="AgDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="TopAgencyList.length > 0">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th width="80%">Agency Name</th>
+                                            <th class="text-center" ng-if="InTermsOf=='1'"> Bookings</th>
+                                            <th class="text-center" ng-if="InTermsOf=='2'"> Sell &nbsp;({{Currency}})</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="a in TopAgencyList">
+
+                                            <td class="data-td-responsive ng-binding autowidth" style="padding-left:20px !important;" data-td="Agency Name :">{{a.AgencyName}}{{a.AgCity}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" ng-if="InTermsOf=='1'" data-td="Count :">{{a.BookingCount}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" ng-if="InTermsOf=='2'" data-td="Sell :">{{a.TotalSelling.toFixed(2)}}</td>
+
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20 ">
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-show="(logintype == '1' || BranchIsOverSeas == true)">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Supplier Productivity</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="SuppReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="SuppNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="SuppDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse" ng-show="TopSupplierList.length > 0">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th width="80%">Supplier Name</th>
+                                            <th class="text-center" ng-if="InTermsOf=='1'"> Bookings</th>
+                                            <th class="text-center" ng-if="InTermsOf=='2'"> Sell &nbsp;({{Currency}})</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="s in TopSupplierList">
+
+                                            <td class="data-td-responsive ng-binding " style="padding-left:20px !important;" data-td="Supplier Name :">{{s.SupplierName}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" ng-if="InTermsOf=='1'" data-td="Count :">{{s.BookingCount}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" ng-if="InTermsOf=='2'" data-td="Sell :">{{s.TotalSelling.toFixed(2)}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-show="(logintype == '1' || BranchIsOverSeas == true)">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Failed Bookings</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="FailedBookingReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="failedNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="failedDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse" ng-show="FailedSuppList.length > 0">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th width="80%">Supplier Name</th>
+                                            <th class="text-center"> Bookings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="f in FailedSuppList">
+
+                                            <td class="data-td-responsive ng-binding" style="padding-left:20px !important;" data-td="City Name :">{{f.SupplierName}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="Sell :">{{f.BookingCount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20 " ng-show="(CompCode == '1')">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="(logintype == '1' || logintype == '2')">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Agency Activity</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="AgActivityReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="AgActiveNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="AgActiveDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse" ng-show="AgActiveList.length > 0">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th width="50%">Agency Name</th>
+                                            <th class="text-center" width="10%">Bookings</th>
+                                            <th class="text-center" width="10%">Reconfirmed</th>
+                                            <th class="text-center" width="10%">Cancelled</th>
+                                            <th class="text-center" width="10%"> Vouchered (%)</th>
+                                            <th class="text-center" width="10%"> Cancelled (%)</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="s in AgActiveList">
+
+                                            <td class="data-td-responsive ng-binding " style="padding-left:20px !important;" data-td="Agency Name :">{{s.AgName}},{{s.City}},{{s.Country}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="Bookings :">{{s.Bookings}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="Reconfirmed :">{{s.Reconfirmed}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="Cancelled :">{{s.Cancelled}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="RRPer :">{{s.RRPer}}</td>
+                                            <td class="data-td-responsive ng-binding text-right" data-td="XXPer :">{{s.XXPer}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20 " ng-show="(CompCode == '1')">
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" ng-show="(logintype == '1' || logintype == '2')">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Agency Activity Report (Api Out)</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a ng-click="AgApiOutActivityReportViewMoreclick();" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="AgApiOutActiveNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            <div ng-show="AgApiOutActiveDataLoading">
+                                <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="overflow-x: auto;">
+
+                                <table id="AgencyReport" class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse" ng-show="AgApiOutActiveList.length > 0">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" width="3%" ng-repeat="column in columnNames">{{ column }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="row in JsonObj">
+                                            <td class="data-td-responsive ng-binding text-right" ng-repeat="column in columnNames">{{ row[column] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top20">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Top Searched City & Bookings</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a href="~/Dashboard/SearchCityBookingReport" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="CitysearchNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            @*<div ng-show="CitysearchDataLoading">
+                        <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                    </div>*@
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="SearchBookByCityList.length > 0" style=" table-layout: fixed !important;">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th style="width: 50%;">City Name</th>
+                                            <th class="text-center" style="width: 30%;">Searching (Bookings)</th>
+                                            <th class="text-center" style="width: 20%;">Ratio</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="c in SearchBookByCityList">
+                                            <td class="data-td-responsive ng-binding autowidth" style="padding-left:20px !important;" data-td="City Name :">{{c.CityName}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" data-td="Count :">{{c.SearchCount}} ({{c.BookingCount}})</td>
+                                            <td class="data-td-responsive ng-binding text-right padd-rgt05 autowidth" data-td="Sell :">{{c.Ratio.toFixed(2)}} %</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-show="logintype != '4'">
+
+                        <div class="panel Hmpanel-table">
+                            <div class="Hmpanel-heading">
+                                <h4 class="Hmpanel-title"> Top Searched Agents & Bookings</h4>
+                                <span class="Hmclickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+                                <a href="~/Dashboard/SearchAgentBookingReport" class="HmView-more2" title="Click to view more">View More</a>
+                            </div>
+                            <div class="padd15" ng-show="AgsearchNoRecords">
+                                <sapn>No Records Found</sapn>
+                            </div>
+                            @*<div ng-show="AgsearchDataLoading">
+                        <div class=""><img src="~/images/loading1.gif" width="50%"></div>
+                    </div>*@
+                            <div style="padding: 17px;">
+                                <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs Hmtable specialCollapse autowidth" ng-show="SearchBookByAgencyList.length > 0" style=" table-layout: fixed !important;">
+                                    <thead class="main-head hidden-xs">
+                                        <tr>
+                                            <th style="width: 50%;">Agency Name</th>
+                                            <th class="text-center" style="width: 30%;">Searching (Bookings)</th>
+                                            <th class="text-center" style="width: 20%;">Ratio</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody class="hsrr-tbody-main">
+                                        <tr ng-repeat="ac in SearchBookByAgencyList">
+
+                                            <td class="data-td-responsive ng-binding autowidth" style="padding-left:20px !important;" data-td="Agency Name :">{{ac.AgencyName}}, {{ac.AgCityName}}</td>
+                                            <td class="data-td-responsive ng-binding text-right autowidth" data-td="Count :">{{ac.SearchCount}} ({{ac.BookingCount}})</td>
+                                            <td class="data-td-responsive ng-binding text-right padd-rgt05 autowidth" data-td="Count :">{{ac.Ratio.toFixed(2)}} %</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="min-height: 275px;display:none;">
+                    <h4>Blocked  Suppliers</h4>
+
+                    <table class="table hsrrrtbl mbkngtable mbktbl tbl-block-responsive-xs">
+                        <thead class="main-head hidden-xs">
+                            <tr>
+                                <th>Supplier Name</th>
+                                <th>Date</th>
+                                <th>User Name</th>
+                                <th>NoOfadays</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="hsrr-tbody-main"></tbody>
+                    </table>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top05 mrg-lft10" style="width:99%;">
+
+                    <div class="col-md-12 col-sm-12 col-xs-12" ng-show="YearlygraphLoading"><img src="~/images/loading1.gif" width="50%"></div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding mrg-top15 mrg-lft10 whitebg mrg-lft10" style="width:99%;" id="YearlyGraphDiv">
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <a href="javascript:" id="return-to-top" class="returntotop" onclick="scrolltop()"><i class="fa fa-angle-double-up"></i></a>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                PopUpController.OpenPopup2("divPopup", "");
+
+                var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+
+                GetHomeDetails(data);
+
+
+
+
+                $(window).scroll(function (e) {
+                    var $el = $('#DivHomehedaer');
+                     var isPositionFixed = ($el.css('position') == 'fixed');
+                    if ($(this).scrollTop() > 200 && !isPositionFixed) {
+                        $el.css({ 'position': 'fixed', 'top': '0px', 'z-index': '10','border-bottom': '2px solid rgb(158, 158, 158) !important;' });
+
+                    }
+                    if ($(this).scrollTop() < 200 && isPositionFixed) {
+                         $el.css({ 'position': 'static', 'top': '0px', });
+
+                    }
+
+                    //
+                    if ($(this).scrollTop() >= 50) {        // If page is scrolled more than 50px
+                        $('#return-to-top').fadeIn(200);    // Fade in the arrow
+                    } else {
+                        $('#return-to-top').fadeOut(200);   // Else fade out the arrow
+                    }
+                });
+
+
+            });
+            //$(document).on('click', '.panel-heading span.clickable', function(e){
+            //    var $this = $(this);
+            //    if(!$this.hasClass('panel-collapsed')) {
+            //        $this.parents('.panel').find('.specialCollapse').slideUp();
+            //        $this.addClass('panel-collapsed');
+            //        $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+            //    } else {
+            //        $this.parents('.panel').find('.specialCollapse').slideDown();
+            //        $this.removeClass('panel-collapsed');
+            //        $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+            //    }
+            //});
+
+            $(document).on('click', '.Hmpanel-heading span.Hmclickable', function(e){
+                var $this = $(this);
+                if(!$this.hasClass('panel-collapsed')) {
+                    $this.parents('.panel').find('.specialCollapse').slideUp();
+                    $this.addClass('panel-collapsed');
+                    $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+
+                } else {
+                    $this.parents('.panel').find('.specialCollapse').slideDown();
+                    $this.removeClass('panel-collapsed');
+                    $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+
+                }
+            });
+
+            function scrolltop() {
+                $('body,html').animate({
+                    scrollTop: 0                       // Scroll to top of body
+                }, 500);
+            }
+
+
+
+
+
+        </script>
+    </body>
+}
+else
+{
+    <style type="text/css">
+        .wlcmtxt {
+           font-size:18px;
+           text-align:center;
+           font-weight:bold;
+           margin:0px auto 10px;
+        }
+
+        .modal-content {
+            border-radius: 5px;
+            border: 5px solid #cbc6c6;
+        }
+        .modal-body {
+            border-radius: 10px;
+            background-color:#f6f6f6;
+        }
+    </style>
+    <body>
+        <div class="" id="" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-md">
+                <!-- Modal content-->
+                <div class="modal-content modal-md">
+
+
+                    <div class="modal-body">
+
+                        <p class="wlcmtxt">Welcome to Dashboard and Reporting System</p>
+                        <img src="~/images/db_welcome.jpg" width="400px" class="img-responsive text-center center-block" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </body>
+}
+
+
+
+</html>
